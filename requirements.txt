@@ -3,3 +3,4 @@ dj-static==0.0.6
 mysqlclient
 gunicorn
 channels
+simplejson
