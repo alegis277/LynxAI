@@ -2,5 +2,4 @@ Django==2.1.4
 dj-static==0.0.6
 mysqlclient
 gunicorn
-channels
 simplejson

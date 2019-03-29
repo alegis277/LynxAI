@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
-ASGI_APPLICATION = "LynxAI.routing.application"
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
