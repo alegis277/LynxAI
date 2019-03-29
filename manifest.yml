@@ -1,2 +1,6 @@
  applications: 
   - name: lynxAI
+  - name: MultiChatTestWorkers
+    no-route: true
+    health-check-type: process
+    command: daphne -p 8001 LynxAI.asgi:application
