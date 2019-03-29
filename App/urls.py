@@ -8,5 +8,6 @@ from . import views
 
 urlpatterns = [
 	path('favicon.ico', favicon_view, name='favicon'),
+	path('myIcon.ico', favicon_view, name='favicon'),
 	path('', views.index, name='index'),
 ]
