@@ -13,27 +13,99 @@
 	<script src="{% static 'js/js.cookie.min.js' %}"></script>
 
 
+	<style type="text/css">
 
-{% csrf_token %}
+		input {
+			font-family: Helvetica;
+			outline: 0;
+			background: #f2f2f2;
+			width: 70%;
+			border: 0;
+			margin: 0 0 15px;
+			padding: 30px;
+			box-sizing: border-box;
+			font-size: 18px;
+			height: 20px;
+			margin-top: 20px;
+		}
+
+		button{
+			background:#4381ea;
+			border:0;
+			color:#fff;
+			padding:10px;
+			font-size:20px;
+			width:30%;
+			margin:20px auto;
+			display:block;
+			cursor:pointer;
+			margin-top:30px;
+			outline:none;
+		}
+
+		button:active { 
+			background-color: #3263b5;
+		}
+
+
+	</style>
+
+
+
+	{% csrf_token %}
 
 </head>
 
-<body style="background-image: radial-gradient(circle at 414px 44%, #006699,32% , white);width: 100vw;height: 100vh;overflow: hidden">
+<body style="background-image: radial-gradient(circle at 26% 48%, #25d4dc,1% , white);width: 100vw;height: 100vh;overflow: hidden">
 
 
-	<div>
 
-		<img src="{% static 'img/watson_nb.gif' %}" style="width: 709px;top: 0px;bottom: 167px;margin: auto;position: absolute;left: 56px;">
+	<div style="height: 100vh; width: 50%;text-align: center;position: relative;display: inline-block;">
 
-		<label id="saludo" style="text-align: center;display: block;bottom: 0;top: 340px;margin: auto;position: absolute;height: 10px;left: 269px;color: white;font-family: Helvetica;font-weight: 100;font-size: 30px;">LynxAI</label>
+		<div style="top: 0;left: 0;bottom: 0;right: 0;margin: auto;position: absolute;height: 460px;">
+			<img id="imagen" src="{% static 'img/avatar_purple.png' %}" style="width: auto;height: 350px;margin:auto;"><br>
+			<label id="texto" style="font-family: Helvetica; font-size: 2.5vw;margin-top: 5%;display: inline-block;font-weight: 100">Welcome to <a style="font-weight: 400">Lynx AI</a> <br> Health Solution Services</label>
+		</div>
+
+
 
 	</div>
 
 
+	<div class="flex-container" style="padding:2%;text-align: center;margin: auto;position: absolute;top: 0;bottom: 0;height: 340px;right: 10%;width: 400px; background-color: #152d2f30;border-radius: 20px;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);">
+		<form method="post">
+			{% csrf_token %}
+
+			<label style="font-family: Helvetica; font-size: 30px; font-weight: 100;margin-bottom: 40px;display: inline-block;">Login to LynxAI</label><br>
+
+
+
+			<input type="text" name="username" maxlength="254" required="" id="id_username" placeholder="Username"><br>
+			<input type="password" name="password" required="" id="id_password" placeholder="Password" >
+
+
+			<button type="submit">Login</button>
+
+			{% if form.errors %}
+			<p style="font-family: Helvetica; font-size: 40px; font-weight: 100;margin-bottom: 40px;display: inline-block;color:#c13333">Incorrect username or password.</p>
+			{% endif %}
+
+
+
+
+		</form>
+
+	</div>
+
+
+
+
+
+	
 </body>
 
 <script type="text/javascript">
-
+	
 	//var today = new Date()
 	//var curHr = today.getHours()
 
