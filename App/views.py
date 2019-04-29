@@ -26,7 +26,7 @@ def index(request):
 	elif userType == BOOKING:
 		return render(request, 'booking.html')
 
-	return HttpResponse("No user type has been set - Contact admin")
+	return render(request, 'unknown.html')
 
 @login_required
 def logout_user(request):
