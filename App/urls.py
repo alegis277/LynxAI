@@ -12,4 +12,6 @@ urlpatterns = [
 	path('myIcon.ico', favicon_view, name='favicon'),
 	path('', views.index, name='index'),
 	path('admin/', admin.site.urls),
+	path('accounts/', include('django.contrib.auth.urls')),
+	path('logout_user/', views.logout_user, name='logout_user'),
 ]
