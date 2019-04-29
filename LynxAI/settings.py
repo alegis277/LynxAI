@@ -12,14 +12,25 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'h0xEgmxE55',
+#         'USER': 'h0xEgmxE55',
+#         'PASSWORD': 'y5W34jtwT2',
+#         'HOST': 'remotemysql.com',
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'h0xEgmxE55',
-        'USER': 'h0xEgmxE55',
-        'PASSWORD': 'y5W34jtwT2',
-        'HOST': 'remotemysql.com',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'djfdlbhx',
+        'USER': 'djfdlbhx',
+        'PASSWORD': 'Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds',
+        'HOST': 'isilo.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
 
