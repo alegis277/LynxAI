@@ -14,7 +14,8 @@ BOOKING = 'booking'
 @login_required
 def index(request):
 
-	userType = list(request.user.groups.values_list('name',flat=True))[0]
+	userType = list(request.user.groups.values_list('name',flat=True))
+	userType = -1 if len(userType)==0 else userType[0]
 
 	if userType == MEDICS:
 		return render(request, 'medics.html')
