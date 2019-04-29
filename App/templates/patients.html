@@ -3,12 +3,127 @@
 <html>
 <head>
 	<title>Lynx AI - Patients</title>
+
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+
+
+	<style type="text/css">
+		
+
+		ul {
+			display:none;
+			margin-top:-1px;
+			background: rgba(0, 0, 0, 0.78);
+			color: #fefefe;
+			width:300px;
+			position: absolute;
+			top: 70px;
+
+			font-family: Helvetica;
+			font-weight: 300;
+			list-style: none;
+			margin:0;
+			padding:0;
+		}
+
+		li {
+			border-bottom:1px solid rgba(0, 0, 0, 0.1);
+		}
+
+		a, a:visited {
+			text-decoration:none;
+			padding-left:0;
+			color: #fefefe;
+			padding-left:15px;
+			display:block;
+			transition: all .3s ease-in-out;
+			-moz-transition: all .3s ease-in-out;
+			-webkit-transition: all .3s ease-in-out;
+		}
+
+		a:hover {
+			background: rgba(0, 0, 0, 0.9);
+			transition: all .3s ease-in-out;
+			-moz-transition: all .3s ease-in-out;
+			-webkit-transition: all .3s ease-in-out;
+		}
+
+		#menuicon{
+			transition-property: color; 
+			transition-duration: 0.3s; 
+			transition-timing-function: ease; 
+
+		}
+		#menuicon:hover { 
+			color: #ffffff;
+		}
+
+
+	</style>
+
+
+
 </head>
 <body>
 
-	<h1 style="text-align: center;display: block;">Patients GUI</h1>
 
-	<button onclick="window.location='/logout_user'" style="display:block;margin: auto">Logout</button>
 
+
+
+	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 1;" id="main">
+
+		<div class="main-nav" style="cursor: pointer;">
+			
+			<i id="menuicon" class="fa" style="font-size: 33px;vertical-align: middle;width: auto;height: 45px;float: left;position: absolute;display: inline;bottom: 9px;left: 18px;">&#xf0c9;</i>
+
+
+			<ul id="ul_hidden">
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf362;</i>Change current controller</a></li>
+				<li><a onclick="console.log('op2')" href="javascript:;" id="ControllerConfig"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Classic PID configuration</a></li>
+				<li><a onclick="console.log('op3')" href="javascript:;" id="ControllerConfig2"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Adaptative PID configuration</a></li>
+
+			</ul>
+		</div>
+
+		<script type="text/javascript">
+			$('.main-nav').on('click',function(){
+				event.stopPropagation();
+				$('ul').slideToggle(280);
+				$('#menuicon').css({'color':'white'})
+			});
+
+			$('#ul_hidden').click(function(event){
+				event.stopPropagation();
+			});
+
+			$(window).click(function() {
+				$("ul").slideUp()
+				$('#menuicon').css({'color':''})
+			});
+			$('li').click(function() {
+				$("ul").slideUp()
+				$('#menuicon').css({'color':''})
+			});
+
+		</script>
+
+		<div style="text-align: center;">
+			<img src="{% static 'img/avatar_purple.png' %}" style="width: auto;height: 50px;margin-top: 6px;margin-bottom: 14px;vertical-align: -30px">
+
+			<label style="font-family: Helvetica; font-size: 20px;font-weight: 100;margin-left: 4px">Health Solution Services</label>
+
+		</div>
+
+
+		<i onclick="window.location='/logout_user'" id="menuicon" class="fa" style="cursor:pointer;font-size: 33px;vertical-align: middle;width: auto;height: 45px;float: right;position: absolute;display: inline;bottom: 9px;right: 18px;">&#xf011;</i>
+
+	</div>
+
+
+
+
+	<img src="{% static 'img/bywatson.png' %}" style="position: absolute;bottom: 10px;right: 7px;height: 30px">
 </body>
 </html>
