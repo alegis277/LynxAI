@@ -6,6 +6,11 @@
 
 	<script src="{% static 'js/jquery.min.js' %}"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<link href="{% static 'calendarjs/fullcalendar.min.css' %}" rel='stylesheet' />
+	<link href="{% static 'calendarjs/fullcalendar.print.min.css' %}" rel='stylesheet' media='print' />
+	<script src="{% static 'calendarjs/moment.min.js' %}"></script>
+	<script src="{% static 'calendarjs/jquery.min.js' %}"></script>
+	<script src="{% static 'calendarjs/fullcalendar.min.js' %}"></script>
 
 
 
@@ -59,6 +64,21 @@
 		#menuicon:hover { 
 			color: #ffffff;
 		}
+		label
+		{
+			font-family: Helvetica;
+			font-weight: 100;
+		}
+
+		#ask_watson:hover{
+			background-color: #ffffff61;
+		}
+		#ask_watson{
+			transition-property: background-color; 
+			transition-duration: 0.3s; 
+			transition-timing-function: ease; 
+			cursor: pointer;
+		}
 
 
 	</style>
@@ -72,7 +92,7 @@
 
 
 
-	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 1;" id="main">
+	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 10;" id="main">
 
 		<div class="main-nav" style="cursor: pointer;">
 			
@@ -123,7 +143,94 @@
 
 
 
+	<label style="font-family: Helvetica;font-weight: 100;margin-top: 85px;display: block;font-size: 20px">Good morning, Dr. Óscar Andrés</label>
+	<div id='calendar-container' style="height: 82vh;width: 450px;float: left;">
+
+		<div id='calendar' style="max-width: 450px;margin: 0 auto;float: left;font-family: Helvetica;font-weight: 100"></div>
+	</div>
+
+	<style>
+		.fc-left {
+			font-size: 11px;
+			font-weight: 200
+		}
+	</style>
+
+
+
+
+
+	<div style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px">
+		<label style="font-size: 35px;display: block;" id="campoNombre">Miguel Angel Díaz</label>
+		<label style="font-size: 20px;display: block;" id="campoNombre">El paciente presenta exceso de lamparocidad</label>
+
+		<div style="margin-top:20px">
+			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:rgb(27,104,164)"></div>
+			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:rgb(37,192,84)"></div>
+			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:rgb(248,174,43)"></div>
+			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:rgb(232,69,65)"></div>
+			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:#38b0c3"></div>
+			<div id="ask_watson" style="vertical-align: 10px;display: inline-block;text-align: center;width: 12%;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.28);border-radius: 10px;padding-top: 5px;padding-bottom: 5px;margin-left: 10px;"> 
+				<img src="{% static 'img/avatar_purple.png' %}" style="width: auto;height: 50px;margin: auto;"> <br>
+				<label style="font-size: 15px">Ask<br>Watson!</label>
+			</div>
+		</div>
+	</div>
+
+
+
 
 	<img src="{% static 'img/bywatson.png' %}" style="position: absolute;bottom: 10px;right: 7px;height: 30px">
 </body>
+
+
+
+<script>
+
+	$(document).ready(function() {
+
+		$('#calendar').fullCalendar({
+			header: {
+				right: '',
+			},
+		      minTime: '6:30', // 6:30am
+		      maxTime: '21:00', // 9:00pm
+		      timeFormat: 'hh:mm A',
+		      slotLabelFormat:"hh:mm A",
+		      nowIndicator: true,
+		      height: "parent",
+		      contentHeight: "parent",
+
+		      defaultView: 'agendaDay',
+		      navLinks: false, // can click day/week names to navigate views
+		      editable: false,
+		      eventLimit: false, // allow "more" link when too many events
+		      events: [
+
+
+
+		      {
+		      	id:'1234',
+		      	title: 'Miguel Angel Díaz',
+		      	start: '13:00:00',
+		      	end: '14:00:00',
+		      	imageurl:"{% static 'profile/nophoto.jpg' %}"
+		      },
+
+
+		      ],
+		      eventClick: function(calEvent, jsEvent, view) {
+		      	alert(calEvent.id);
+		      },
+		      eventRender: function(event, eventElement) {
+		      	if (event.imageurl) {
+		      		eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='40' height='40' style='margin-right: 5px;margin-top: 3px;float:right'>");
+		      	}
+		      },
+
+		  });
+
+	});
+
+</script>
 </html>
