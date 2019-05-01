@@ -80,6 +80,14 @@
 			cursor: pointer;
 		}
 
+		.illness_indicator:hover{
+			filter: brightness(115%);
+		}
+		.illness_indicator{
+			transition-duration: 0.3s; 
+			cursor: pointer;
+		}
+
 
 	</style>
 
@@ -100,9 +108,11 @@
 
 
 			<ul id="ul_hidden">
-				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf362;</i>Change current controller</a></li>
-				<li><a onclick="console.log('op2')" href="javascript:;" id="ControllerConfig"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Classic PID configuration</a></li>
-				<li><a onclick="console.log('op3')" href="javascript:;" id="ControllerConfig2"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Adaptative PID configuration</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf492;</i>Book Lab Exam</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf21e;</i>Book Surgery</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf470;</i>Refer to Specialist</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf410;</i>Cancel Appointments</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf05a;</i>About LynxAI</a></li>
 
 			</ul>
 		</div>
@@ -154,6 +164,11 @@
 			font-size: 11px;
 			font-weight: 200
 		}
+		.fc-content{
+			left: -11px;
+    		top: 4px;
+    		cursor: pointer;
+		}
 	</style>
 
 
@@ -164,15 +179,31 @@
 		<label style="font-size: 35px;display: block;" id="campoNombre">Miguel Angel Díaz</label>
 		<label style="font-size: 20px;display: block;" id="campoNombre">El paciente presenta exceso de lamparocidad</label>
 
-		<div style="margin-top:20px">
-			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:rgb(27,104,164)"></div>
-			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:rgb(37,192,84)"></div>
-			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:rgb(248,174,43)"></div>
-			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:rgb(232,69,65)"></div>
-			<div style="display: inline-block;height: 100px;width: 16.5%;background-color:#38b0c3"></div>
+		<div style="margin-top:20px;display: flex;">
+
+
+			<div class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(27,104,164)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Imbecilidad<br><label style="cursor: pointer;font-weight: 400;">101.2%</label></label>
+			</div>
+			<div class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(37,192,84)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Sífilis<br><label style="cursor: pointer;font-weight: 400;">95.3%</label></label>
+			</div>
+			<div class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(248,174,43)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Gonorrea<br><label style="cursor: pointer;font-weight: 400;">53.1%</label></label>
+			</div>
+			<div class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(232,69,65)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">VIH<br><label style="cursor: pointer;font-weight: 400;">25.1%</label></label>
+			</div>
+			<div class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:#38b0c3">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Ebola<br><label style="cursor: pointer;font-weight: 400;">10.5%</label></label>
+
+			</div>
+
+
+
 			<div id="ask_watson" style="vertical-align: 10px;display: inline-block;text-align: center;width: 12%;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.28);border-radius: 10px;padding-top: 5px;padding-bottom: 5px;margin-left: 10px;"> 
-				<img src="{% static 'img/avatar_purple.png' %}" style="width: auto;height: 50px;margin: auto;"> <br>
-				<label style="font-size: 15px">Ask<br>Watson!</label>
+				<img src="{% static 'img/avatar_purple.png' %}" style="width: auto;height: 44px;margin: auto;"> <br>
+				<label style="font-size: 15px;cursor: pointer;">Ask Watson!</label>
 			</div>
 		</div>
 	</div>
@@ -224,7 +255,7 @@
 		      },
 		      eventRender: function(event, eventElement) {
 		      	if (event.imageurl) {
-		      		eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='40' height='40' style='margin-right: 5px;margin-top: 3px;float:right'>");
+		      		eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='40' height='40' style='float:right'>");
 		      	}
 		      },
 
