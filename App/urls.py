@@ -14,4 +14,7 @@ urlpatterns = [
 	path('admin/', admin.site.urls),
 	path('accounts/', include('django.contrib.auth.urls')),
 	path('logout_user/', views.logout_user, name='logout_user'),
+	path('ajax_checkUser/', views.ajax_checkUser, name='ajax_checkUser'),
+	path('ajax_makeAppointment/', views.ajax_makeAppointment, name='ajax_makeAppointment'),
+	path('ajax_getCalendar/', views.ajax_getCalendar, name='ajax_getCalendar'),
 ]

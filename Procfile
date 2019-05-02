@@ -1,1 +1,1 @@
-web: python manage.py migrate && gunicorn LynxAI.wsgi --log-file -
+web: gunicorn LynxAI.wsgi --log-file -

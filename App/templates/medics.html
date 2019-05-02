@@ -6,9 +6,95 @@
 
 	<script src="{% static 'js/jquery.min.js' %}"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<link href="{% static 'calendarjs/fullcalendar.min.css' %}" rel='stylesheet' />
+	<link href="{% static 'calendarjs/fullcalendar.print.min.css' %}" rel='stylesheet' media='print' />
+	<script src="{% static 'calendarjs/moment.min.js' %}"></script>
+	<script src="{% static 'calendarjs/jquery.min.js' %}"></script>
+	<script src="{% static 'calendarjs/fullcalendar.min.js' %}"></script>
+	<script src="{% static 'js/js.cookie.min.js' %}"></script>
+
+	<link rel="stylesheet" href="{% static 'css/simplepicker.css' %}">
+	<script src="{% static 'js/simplepicker.js' %}"></script>
+
+	{% csrf_token %}
+	
 
 
 
+	<style type="text/css">
+		select#soflow {
+			-webkit-appearance: button;
+			-webkit-border-radius: 2px;
+			-webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+			-webkit-padding-end: 20px;
+			-webkit-padding-start: 2px;
+			-webkit-user-select: none;
+			background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+			background-position: 97% center;
+			background-repeat: no-repeat;
+			border: 1px solid #AAA;
+			color: #555;
+			font-size: inherit;
+			margin: 20px;
+			overflow: hidden;
+			padding: 5px 10px;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 300px;
+			outline: none;
+		}
+	</style>
+
+	<style type="text/css">
+
+
+		/* The Modal (background) */
+		.modalConfig {
+			display: none; /* Hidden by default */
+			position: fixed; /* Stay in place */
+			z-index: 1000; /* Sit on top */
+			left: 0;
+			top: 0;
+			width: 100%; /* Full width */
+			height: 100%; /* Full height */
+			background-color: rgb(0,0,0); /* Fallback color */
+			background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		}
+
+		/* Modal Content/Box */
+		.modal-contentConfig {
+			background-color: #fff;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 600px; /* Could be more or less, depending on screen size */
+			height: 280px;
+			overflow: auto; /* Enable scroll if needed */
+			margin: auto;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+
+		}
+
+		/* The Close Button */
+		.closeConfig {
+			color: #9ba3b3;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+			margin-top: -9px;
+		}
+
+		.closeConfig:hover,
+		.closeConfig:focus {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer;
+		}
+	</style>
+	
 	<style type="text/css">
 		
 
@@ -59,8 +145,146 @@
 		#menuicon:hover { 
 			color: #ffffff;
 		}
+		label
+		{
+			font-family: Helvetica;
+			font-weight: 100;
+		}
+
+		#ask_watson:hover{
+			background-color: #ffffff61;
+		}
+		#ask_watson{
+			transition-property: background-color; 
+			transition-duration: 0.3s; 
+			transition-timing-function: ease; 
+			cursor: pointer;
+		}
+
+		.illness_indicator:hover{
+			filter: brightness(115%);
+		}
+		.illness_indicator{
+			transition-duration: 0.3s; 
+			cursor: pointer;
+		}
+
+		textarea {
+			width: 100%;
+			height: 88%;
+			-moz-border-bottom-colors: none;
+			-moz-border-left-colors: none;
+			-moz-border-right-colors: none;
+			-moz-border-top-colors: none;
+			background: none repeat scroll 0 0 rgba(167, 167, 167, 0.42);
+			border-color: -moz-use-text-color #FFFFFF #FFFFFF -moz-use-text-color;
+			border-image: none;
+			border-radius: 6px 6px 6px 6px;
+			border-style: none solid solid none;
+			border-width: medium 1px 1px medium;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+			color: #3c3c3c;
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+			font-size: 1em;
+			line-height: 1.4em;
+			padding: 5px 8px;
+			transition: background-color 0.2s ease 0s;
+			outline: none;
+		}
 
 
+		.button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			width: 150px;
+		}
+		.button svg {
+			height: 55px;
+			width: 150px;
+			fill: none;
+			stroke-width: 5;
+		}
+		.button svg .o1 {
+			stroke: rgb(206, 227, 229);
+			fill: #89babf;
+			transition: all 0.8s ease-in-out;
+		}
+		.button svg .o2 {
+			stroke: white;
+			stroke-dasharray: 20 420;
+			stroke-dashoffset: 20;
+			transition: all 0.8s ease-in-out;
+		}
+		.button span {
+			position: absolute;
+			margin: auto 0;
+			font-family: Helvetica;
+			font-weight: 100;
+		}
+		.button:hover .o1 {
+			fill: #89babfad;
+		}
+		.button:hover .o2 {
+			stroke-dashoffset: -420;
+		}
+
+
+
+	</style>
+
+
+	<style type="text/css">
+
+		ol {
+			counter-reset: li;
+			list-style: none;
+			*list-style: decimal; /* Keep using default numbering for IE6/7 */
+			font-family: Helvetica;
+			padding: 0;
+			text-shadow: 0 1px 0 rgba(255,255,255,.5);
+			width: 80%;
+			margin: 0 auto;
+			margin-right: 17px;
+
+
+		}
+		ol ol {
+			margin-left: 2em;
+		}
+		.rounded-list a {
+			position: relative;
+			display: block;
+			padding: .4em .4em .4em 2em;
+			*padding: .4em;
+			margin: .5em 0;
+			background: #ddd;
+			color: #444;
+			text-decoration: none;
+			border-radius: .3em;
+			transition: all .5s ease-out; 
+		}
+		.rounded-list a:hover{
+			background: #eee;
+		}
+		.rounded-list a:before{
+			content: counter(li);
+			counter-increment: li;
+			position: absolute; 
+			left: -1.3em;
+			top: 50%;
+			margin-top: -1.3em;
+			background: #87ceeb;
+			height: 2em;
+			width: 2em;
+			line-height: 2em;
+			border: .3em solid #fff;
+			text-align: center;
+			font-weight: bold;
+			border-radius: 2em;
+			transition: all .3s ease-out;
+		}
 	</style>
 
 
@@ -72,7 +296,7 @@
 
 
 
-	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 1;" id="main">
+	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 10;" id="main">
 
 		<div class="main-nav" style="cursor: pointer;">
 			
@@ -80,9 +304,11 @@
 
 
 			<ul id="ul_hidden">
-				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf362;</i>Change current controller</a></li>
-				<li><a onclick="console.log('op2')" href="javascript:;" id="ControllerConfig"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Classic PID configuration</a></li>
-				<li><a onclick="console.log('op3')" href="javascript:;" id="ControllerConfig2"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Adaptative PID configuration</a></li>
+				<li><a onclick="modal_exam.style.display = 'block';" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf492;</i>Book Lab Exam</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf21e;</i>Book Surgery</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf470;</i>Refer to Specialist</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf410;</i>Cancel Appointments</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf05a;</i>About LynxAI</a></li>
 
 			</ul>
 		</div>
@@ -123,7 +349,432 @@
 
 
 
+	<label style="font-family: Helvetica;font-weight: 100;margin-top: 85px;display: block;font-size: 20px">Good morning, Dr. Óscar Andrés</label>
+	<div id='calendar-container' style="height: 82vh;width: 450px;float: left;">
+
+		<div id='calendar' style="max-width: 450px;margin: 0 auto;float: left;font-family: Helvetica;font-weight: 100"></div>
+	</div>
+
+	<style>
+		.fc-left {
+			font-size: 11px;
+			font-weight: 200
+		}
+		.fc-content{
+			left: -11px;
+			top: 4px;
+			cursor: pointer;
+		}
+	</style>
+
+
+
+
+
+	<div style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px">
+		<label style="font-size: 35px;display: block;" id="campoNombre">Miguel Angel Díaz</label>
+		<label style="font-size: 20px;display: block;" id="campoNombre">El paciente presenta exceso de lamparocidad</label>
+
+		<div style="margin-top:20px;display: flex;">
+
+
+			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(27,104,164)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Imbecilidad<br><label style="cursor: pointer;font-weight: 400;">101.2%</label></label>
+			</div>
+			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(37,192,84)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Sífilis<br><label style="cursor: pointer;font-weight: 400;">95.3%</label></label>
+			</div>
+			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(248,174,43)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Gonorrea<br><label style="cursor: pointer;font-weight: 400;">53.1%</label></label>
+			</div>
+			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(232,69,65)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">VIH<br><label style="cursor: pointer;font-weight: 400;">25.1%</label></label>
+			</div>
+			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:#38b0c3">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Ebola<br><label style="cursor: pointer;font-weight: 400;">10.5%</label></label>
+
+			</div>
+
+
+
+			<div id="ask_watson" style="vertical-align: 10px;display: inline-block;text-align: center;width: 12%;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.28);border-radius: 10px;padding-top: 5px;padding-bottom: 5px;margin-left: 10px;"> 
+				<img src="{% static 'img/avatar_purple.png' %}" style="width: auto;height: 44px;margin: auto;"> <br>
+				<label style="font-size: 15px;cursor: pointer;">Ask Watson!</label>
+			</div>
+		</div>
+
+
+
+
+		<div style="width: 100%;margin-top: 20px;height: calc(100% - 190px)">
+
+			<div style="float: left;width: 50%;height: 100%">
+				<textarea placeholder="Write about patient symptoms" autocomplete="off" style="resize: none;float: left;"></textarea>
+
+				<div class="button" style="margin-left: calc(106.75% - 10px - 150px);float: left;" id="ControllerConfig2">
+					<span>End Appointment</span>
+					<svg>
+						<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+						<polyline class="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+					</svg>
+				</div>
+			</div>
+
+
+			<div style="float: right;width: 50%">
+				<ol class="rounded-list">
+					<li><a style="background-color: #ffffffa3 !important;">Age: 90</a></li>
+					<li><a style="background-color: #ffffffa3 !important;">Height: 200 cm</a></li>
+					<li><a style="background-color: #ffffffa3 !important;">Weight: 900 Kg</a></li>
+					<li><a style="background-color: #ffffffa3 !important;">Gender: Female</a></li>
+					<li><a style="color:#8c8c8c;background-color: #ffffffa3 !important;cursor: pointer;" onclick="modal_HCI.style.display = 'block';">Show more and edit...</a></li>
+				</ol>
+			</div>
+
+		</div>
+
+
+	</div>
+
+
+
+
+
+
+
 
 	<img src="{% static 'img/bywatson.png' %}" style="position: absolute;bottom: 10px;right: 7px;height: 30px">
+
+
+
+
+
+
+
+
+
+
+	<!-- END APPOINTMENT -->
+
+	<div id="ModalConfig2" class="modalConfig">
+
+		<div class="modal-contentConfig" id="contenidoModalConfig2" style="width: 700px;height: 435px">
+
+			<span class="closeConfig">&times;</span>
+
+			<label style="font-family: Helvetica;font-size: 28px;margin-top: 9px;display: inline-block;">End Current Appointment</label>
+			<label style="font-family: Helvetica;font-size: 19px;display: inline-block;">To finish your current appointment, please enter details about the diagnosis</label>
+			<div style="margin-top: 40px;padding-right: 20px">
+				
+				<textarea placeholder="Write about your diagnosis..." autocomplete="off" style="resize: none;float: left;width: 100%;height: 260px"></textarea>
+
+
+
+				<div class="button" style="float: right;margin-top: 5px">
+					<span>Save Data</span>
+					<svg>
+						<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+						<polyline class="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+					</svg>
+				</div>
+
+
+
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+
+
+	<!-- SHOW DISEASE -->
+
+	<div id="ModalConfig_dis" class="modalConfig">
+
+		<div class="modal-contentConfig" id="contenidoModalConfig_dis" style="width: 700px;height: 435px">
+
+			<span class="closeConfig">&times;</span>
+
+			<label style="font-family: Helvetica;font-size: 28px;margin-top: 9px;display: inline-block;">Disease Name</label>
+			<div style="margin-top: 40px;padding-right: 20px">
+				
+
+				<label style="font-family: Helvetica;font-size: 18px;margin-top: 9px;display: inline-block;">Disease data</label>
+
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+	<!-- BOOK EXAM -->
+
+	<div id="ModalConfig_exam" class="modalConfig">
+
+		<div class="modal-contentConfig" id="contenidoModalConfig_exam" style="width: 700px;height: 435px">
+
+			<span class="closeConfig">&times;</span>
+
+			<label style="font-family: Helvetica;font-size: 28px;margin-top: 9px;display: inline-block;">Book Laboratory Exam</label>
+			<label style="font-family: Helvetica;font-size: 19px;display: inline-block;">Enter the information required for the exam and select an available date</label>
+			<div style="margin-top: 40px;padding-right: 20px">
+
+
+				<label style="margin-left: 100px;float: none;">Laboratory for the exam:</label>
+				<select id="soflow">
+					<option disabled selected>Select a Laboratory...</option>
+					<option>Laboratory 1</option>
+					<option>Laboratory 2</option>
+				</select>
+
+				<label style="margin-left: 73px;float: none;">Exam specific requirements:</label>
+				<textarea placeholder="Exam requirements" autocomplete="off" style="resize: none;width: 283px;margin-left: 21px;vertical-align: top;height: 103px;"></textarea>
+
+
+				<label style="margin-left: 160px;float: none;margin-top: 13px;display: inline-block;">Exam start time:</label>
+				<label style="margin-left: 20px;float: none;color: grey" id="current_time">Select a time</label>
+				<button onclick="myPicker.open()" style="background-color: #89babf;border: none;color: black;padding: 5px 32px;text-align: center;display: inline-block;font-size: 16px;margin: 8px 2px;cursor: pointer;float: right;margin-right: 81px;">Pick time</button>
+
+
+				<script type="text/javascript">
+					myPicker = new SimplePicker({zIndex: 1001});
+					myPicker.on('submit', function(date, readableDate){
+						$("#current_time").html(readableDate)
+					})
+
+				</script>
+
+				<br>
+
+				<div class="button" style="float: right;margin-top: 50px;margin-right: -135px;">
+					<span>Book exam</span>
+					<svg>
+						<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+						<polyline class="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+					</svg>
+				</div>
+
+
+
+
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+
+	<!-- HCI -->
+
+	<div id="ModalConfig_HCI" class="modalConfig">
+
+		<div class="modal-contentConfig" id="contenidoModalConfig_HCI" style="width: 900px;height: 550px">
+
+			<span class="closeConfig">&times;</span>
+
+			<label style="font-family: Helvetica;font-size: 28px;margin-top: 9px;display: inline-block;">Patient Detailed HCI</label>
+
+			<div style="margin-top: 40px;padding-right: 20px">
+
+				<label style="margin-left: 152px;float: none;">Patient name:</label>
+				<textarea placeholder="Patient name" autocomplete="off" style="resize: none;width: 395px;margin-left: 21px;vertical-align: middle;height: 22px;"></textarea>
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;">Age:</label>
+				<textarea placeholder="Patient age" autocomplete="off" style="resize: none;width: 395px;margin-left: 84px;vertical-align: middle;height: 22px;"></textarea>
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;">Height:</label>
+				<textarea placeholder="Patient height" autocomplete="off" style="resize: none;width: 395px;margin-left: 67px;vertical-align: middle;height: 22px;"></textarea>
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;">Weight:</label>
+				<textarea placeholder="Patient weight" autocomplete="off" style="resize: none;width: 395px;margin-left: 64px;vertical-align: middle;height: 22px;"></textarea>
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;">Gender:</label>
+				<textarea placeholder="Patient gender" autocomplete="off" style="resize: none;width: 395px;margin-left: 60px;vertical-align: middle;height: 22px;"></textarea>
+
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;">Surgeries:</label>
+				<textarea placeholder="Patient surgeries" autocomplete="off" style="resize: none;width: 395px;margin-left: 45px;vertical-align: top;height: 88px;"></textarea>
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;">Diseases:</label>
+				<textarea placeholder="Patient diseases" autocomplete="off" style="resize: none;width: 395px;margin-left: 49px;vertical-align: top;height: 88px;"></textarea>
+
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;display: inline-block;width: 118px;">Family disease history:</label>
+				<textarea placeholder="Family disease history" autocomplete="off" style="resize: none;width: 395px;margin-left: 0px;vertical-align: top;height: 88px;"></textarea>
+
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;">Medication:</label>
+				<textarea placeholder="Patient medication" autocomplete="off" style="resize: none;width: 395px;margin-left: 34px;vertical-align: top;height: 88px;"></textarea>
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;">Allergies:</label>
+				<textarea placeholder="Patient allergies" autocomplete="off" style="resize: none;width: 395px;margin-left: 51px;vertical-align: top;height: 88px;"></textarea>
+
+
+				<br><br>
+
+				<label style="margin-left: 152px;float: none;display: inline-block;width: 118px;">Sexual disease history:</label>
+				<textarea placeholder="Sexual disease history" autocomplete="off" style="resize: none;width: 395px;margin-left: 0px;vertical-align: top;height: 88px;"></textarea>
+
+				<div class="button" style="float: right;margin-top: 124px">
+					<span>Save Changes</span>
+					<svg>
+						<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+						<polyline class="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+					</svg>
+				</div>
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+
+
 </body>
+
+
+
+<script>
+
+	$(document).ready(function() {
+
+		$('#calendar').fullCalendar({
+			header: {
+				right: '',
+			},
+		      minTime: '6:30', // 6:30am
+		      maxTime: '21:00', // 9:00pm
+		      timeFormat: 'hh:mm A',
+		      slotLabelFormat:"hh:mm A",
+		      nowIndicator: true,
+		      height: "parent",
+		      contentHeight: "parent",
+
+		      defaultView: 'agendaDay',
+		      navLinks: false, // can click day/week names to navigate views
+		      editable: false,
+		      eventLimit: false, // allow "more" link when too many events
+		      events: [
+
+
+
+		      {
+		      	id:'1234',
+		      	title: 'Miguel Angel Díaz',
+		      	start: '13:00:00',
+		      	end: '14:00:00',
+		      	imageurl:"{% static 'profile/nophoto.jpg' %}"
+		      },
+
+
+		      ],
+		      eventClick: function(calEvent, jsEvent, view) {
+		      	alert(calEvent.id);
+		      },
+		      eventRender: function(event, eventElement) {
+		      	if (event.imageurl) {
+		      		eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='40' height='40' style='float:right'>");
+		      	}
+		      },
+
+		  });
+
+	});
+
+</script>
+
+
+
+<script type="text/javascript">
+	modal3 = document.getElementById('ModalConfig2');
+	btn3 = document.getElementById("ControllerConfig2");
+	span3 = document.getElementsByClassName("closeConfig")[0];
+
+	modal_dis = document.getElementById('ModalConfig_dis');
+	span_dis = document.getElementsByClassName("closeConfig")[1];
+
+	modal_exam = document.getElementById('ModalConfig_exam');
+	span_exam = document.getElementsByClassName("closeConfig")[2];
+
+	modal_HCI = document.getElementById('ModalConfig_HCI');
+	span_HCI = document.getElementsByClassName("closeConfig")[3];
+
+
+	btn3.onclick = function() {
+		modal3.style.display = "block";
+	}
+
+
+	span3.onclick = function() {
+		modal3.style.display = "none";
+	}
+	span_dis.onclick = function() {
+		modal_dis.style.display = "none";
+	}
+	span_exam.onclick = function() {
+		modal_exam.style.display = "none";
+	}
+	span_HCI.onclick = function() {
+		modal_HCI.style.display = "none";
+	}
+
+
+	window.onclick = function(event) {
+		if (event.target == modal3) {
+			modal3.style.display = "none";
+		}
+		if (event.target == modal_dis) {
+			modal_dis.style.display = "none";
+		}
+		if (event.target == modal_exam) {
+			modal_exam.style.display = "none";
+		}
+		if (event.target == modal_HCI) {
+			modal_HCI.style.display = "none";
+		}
+	}
+</script>
+
+
+
+
+
+
+
 </html>
