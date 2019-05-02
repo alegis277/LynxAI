@@ -6,10 +6,56 @@
 
 	<script src="{% static 'js/jquery.min.js' %}"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<link href="{% static 'calendarjs/fullcalendar.min.css' %}" rel='stylesheet' />
+	<link href="{% static 'calendarjs/fullcalendar.print.min.css' %}" rel='stylesheet' media='print' />
+	<script src="{% static 'calendarjs/moment.min.js' %}"></script>
+	<script src="{% static 'calendarjs/jquery.min.js' %}"></script>
+	<script src="{% static 'calendarjs/fullcalendar.min.js' %}"></script>
+	<script src="{% static 'js/js.cookie.min.js' %}"></script>
 
+	<link rel="stylesheet" href="{% static 'css/simplepicker.css' %}">
+	<script src="{% static 'js/simplepicker.js' %}"></script>
 
+	{% csrf_token %}
 
 	<style type="text/css">
+
+		.button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			width: 150px;
+		}
+		.button svg {
+			height: 55px;
+			width: 150px;
+			fill: none;
+			stroke-width: 5;
+		}
+		.button svg .o1 {
+			stroke: rgb(206, 227, 229);
+			fill: #89babf;
+			transition: all 0.8s ease-in-out;
+		}
+		.button svg .o2 {
+			stroke: white;
+			stroke-dasharray: 20 420;
+			stroke-dashoffset: 20;
+			transition: all 0.8s ease-in-out;
+		}
+		.button span {
+			position: absolute;
+			margin: auto 0;
+			font-family: Helvetica;
+			font-weight: 100;
+		}
+		.button:hover .o1 {
+			fill: #89babfad;
+		}
+		.button:hover .o2 {
+			stroke-dashoffset: -420;
+		}
 
 
 		ul {
@@ -30,6 +76,7 @@
 
 		li {
 			border-bottom:1px solid rgba(0, 0, 0, 0.1);
+			z-index: 999
 		}
 
 		a, a:visited {
@@ -41,6 +88,7 @@
 			transition: all .3s ease-in-out;
 			-moz-transition: all .3s ease-in-out;
 			-webkit-transition: all .3s ease-in-out;
+			z-index: 999
 		}
 
 		a:hover {
@@ -64,23 +112,75 @@
 	</style>
 
 
+	<style type="text/css">
+		select#soflow {
+			-webkit-appearance: button;
+			-webkit-border-radius: 2px;
+			-webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+			-webkit-padding-end: 20px;
+			-webkit-padding-start: 2px;
+			-webkit-user-select: none;
+			background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+			background-position: 97% center;
+			background-repeat: no-repeat;
+			border: 1px solid #AAA;
+			color: #555;
+			font-size: inherit;
+
+			overflow: hidden;
+			padding: 5px 10px;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 100%;
+			outline: none;
+		}
+		label
+		{
+			font-family: Helvetica;
+			font-weight: 100;
+		}
+		textarea {
+			width: 100%;
+			height: 88%;
+			-moz-border-bottom-colors: none;
+			-moz-border-left-colors: none;
+			-moz-border-right-colors: none;
+			-moz-border-top-colors: none;
+			background: none repeat scroll 0 0 rgba(167, 167, 167, 0.42);
+			border-color: -moz-use-text-color #FFFFFF #FFFFFF -moz-use-text-color;
+			border-image: none;
+			border-radius: 6px 6px 6px 6px;
+			border-style: none solid solid none;
+			border-width: medium 1px 1px medium;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+			color: #3c3c3c;
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+			font-size: 1em;
+			line-height: 1.4em;
+			padding: 5px 8px;
+			transition: background-color 0.2s ease 0s;
+			outline: none;
+		}
+	</style>
+
+
 
 </head>
 <body>
 
 
 
-	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 1;" id="main">
+	<div style="z-index: 999;background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;" id="main">
 
 		<div class="main-nav" style="cursor: pointer;">
 			
 			<i id="menuicon" class="fa" style="font-size: 33px;vertical-align: middle;width: auto;height: 45px;float: left;position: absolute;display: inline;bottom: 9px;left: 18px;">&#xf0c9;</i>
 
 
-			<ul id="ul_hidden">
-				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf362;</i>Change current controller</a></li>
-				<li><a onclick="console.log('op2')" href="javascript:;" id="ControllerConfig"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Classic PID configuration</a></li>
-				<li><a onclick="console.log('op3')" href="javascript:;" id="ControllerConfig2"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Adaptative PID configuration</a></li>
+			<ul id="ul_hidden" style="z-index: 999">
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf0f0;</i>View doctors information</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf410;</i>Cancel Appointments</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf05a;</i>About LynxAI</a></li>
 
 			</ul>
 		</div>
@@ -114,7 +214,6 @@
 
 		</div>
 
-
 		<i onclick="window.location='/logout_user'" id="menuicon" class="fa" style="cursor:pointer;font-size: 33px;vertical-align: middle;width: auto;height: 45px;float: right;position: absolute;display: inline;bottom: 9px;right: 18px;">&#xf011;</i>
 
 	</div>
@@ -122,6 +221,196 @@
 
 
 
+
+
+
+	<label style="font-family: Helvetica;font-weight: 100;margin-top: 85px;display: block;font-size: 20px">Good morning, {{name}}</label>
+	<div id='calendar-container' style="height: 82vh;width: 1000px;float: left;">
+
+		<div id='calendar' style="max-width: 1000px;margin: 0 auto;float: left;font-family: Helvetica;font-weight: 100"></div>
+	</div>
+
+	<style>
+		.fc-left {
+			font-size: 11px;
+			font-weight: 200
+		}
+		.fc-content{
+			left: -11px;
+			top: 4px;
+			cursor: pointer;
+		}
+	</style>
+
+
+
+
+	<div style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 1120px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px">
+
+
+		<label>Select doctor to book:</label>
+		<select onchange="update_calendar()" id="soflow" style="margin-bottom: 10px;margin-top: 10px">
+			<option disabled selected>Select a doctor...</option>
+			{% for doctor in doctors_related %}
+			<option id="{{doctor.1.0}}">{{doctor.0.0}}</option>
+			{% endfor %}
+		</select>
+
+		<label style="">Patient ID card:</label>
+		<textarea id="patient_id" placeholder="Patient ID" autocomplete="off" style="resize: none;width: 86%;vertical-align: middle;height: 22px;margin-bottom: 10px"></textarea>
+		<i onclick="checkID()" class="fa" style="font-size: 23px;margin-bottom: 11px;color: green;cursor: pointer;">&#xf058;</i>
+
+
+		<label style="">Patient name:</label>
+		<textarea id="patient_name" disabled placeholder="Patient name" autocomplete="off" style="resize: none;width: 95%;vertical-align: middle;height: 22px;margin-bottom: 10px"></textarea>
+
+
+		<label style=";" >Pacient complaints:</label>
+		<textarea id="patient_complaint" placeholder="Enter complaints" autocomplete="off" style="resize: none;width: 95%;height: 103px;"></textarea>
+
+
+
+		<label style="margin-top: 30px;margin-bottom: 5px;float: none;color: grey;display: block;text-align: center;" id="current_time">Selected time</label>
+		<button onclick="myPicker.open()" style="background-color: #89babf;border: none;color: black;padding: 5px 32px;text-align: center;font-size: 16px;cursor: pointer;display: block;margin:auto;">Pick time</button>
+		<script type="text/javascript">
+			myPicker = new SimplePicker({zIndex: 1001});
+			myPicker.on('submit', function(date, readableDate){
+				$("#current_time").html(readableDate)
+				dateGlobal = date
+			})
+
+		</script>
+
+
+
+		<div class="button" style="float: right;margin-top: 40px" onclick="make_appointment()">
+			<span>Book appointment</span>
+			<svg>
+				<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+				<polyline class="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+			</svg>
+		</div>
+
+
+	</div>
+
+
+
+
+
+
 	<img src="{% static 'img/bywatson.png' %}" style="position: absolute;bottom: 10px;right: 7px;height: 30px">
 </body>
+
+
+
+
+
+
+<script>
+
+	$(document).ready(function() {
+
+		$('#calendar').fullCalendar({
+
+
+			timeFormat: 'hh:mm A',
+
+			height: "parent",
+			contentHeight: "parent",
+			defaultView: 'month',
+
+
+
+			
+			eventClick: function(calEvent, jsEvent, view) {
+			},
+			eventRender: function(event, eventElement) {
+				if (event.imageurl) {
+					eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='40' height='40' style='float:right'>");
+				}
+			},
+
+		});
+
+	});
+
+</script>
+
+
+<style type="text/css">
+	
+	.fc-time{
+		font-size: 10px !important;
+		margin-left: 10px !important;
+		font-weight: 100 !important;
+	}
+	.fc-title
+	{
+		font-size: 9px !important;
+	}
+	.fc-content
+	{
+		top:0 !important;
+	}
+
+</style>
+
+
+
+
+<script type="text/javascript">
+	function checkID()
+	{
+		id_check_in = $("#patient_id").val()
+		$.ajax('/ajax_checkUser/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), id_check:id_check_in}, success: function(transport){
+
+			respuesta = JSON.parse(transport)
+
+			$("#patient_name").html(respuesta.patient_name)
+
+		}});
+	}
+
+	function make_appointment() {
+
+		doc_id = $('#soflow').find(":selected")[0].id
+		patient_id = $("#patient_id").val()
+		complaint = $("#patient_complaint").val()
+		date = dateGlobal.toLocaleString()
+
+		$.ajax('/ajax_makeAppointment/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), doc_id:doc_id, patient_id:patient_id, complaint:complaint, date:date}, success: function(transport){
+			update_calendar()
+			alert("Booking complete!")
+			$("#patient_id").val("")
+			$("#patient_name").html("")
+			$("#patient_complaint").val("")
+			$("#current_time").html("Selected time")
+
+		}});
+	}
+
+	function update_calendar() {
+
+
+		doc_id = $('#soflow').find(":selected")[0].id
+
+		$.ajax('/ajax_getCalendar/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), doc_id:doc_id}, success: function(transport){
+
+			data = JSON.parse(transport)
+
+			$("#calendar").fullCalendar( 'removeEvents' )
+			$("#calendar").fullCalendar( 'addEventSource', data.source )
+
+		}});
+		
+
+		
+
+
+	}
+
+
+</script>
+
 </html>
