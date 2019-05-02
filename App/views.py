@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 import psycopg2
 import simplejson as json
+from django.contrib.auth.models import User
 
 # User type flags
 MEDICS = 'medics'
@@ -23,10 +24,20 @@ def index(request):
 	userType = -1 if len(userType)==0 else userType[0]
 
 	if userType == MEDICS:
-		return render(request, 'medics.html')
+		dbConnect.commit()
+		dbConnect.close()
+		labs = list(User.objects.filter(groups__name='labs'))
+
+		labNames = [labActual.first_name for labActual in labs]
+		labIds = [labActual.id for labActual in labs]
+		return render(request, 'medics.html', {'name':request.user.first_name+" "+request.user.last_name, 'id_doc' : str(request.user.id), 'labs':zip(labIds, labNames)})
 	elif userType == PATIENTS:
+		dbConnect.commit()
+		dbConnect.close()
 		return render(request, 'patients.html')
 	elif userType == LABS:
+		dbConnect.commit()
+		dbConnect.close()
 		return render(request, 'labs.html')
 
 
@@ -138,12 +149,50 @@ def ajax_getCalendar(request):
 		patient_name = name[0][0] + " "+ name[0][1]
 
 		
-		dataToAppend = {'title': patient_name, 'start': date, 'end': date}
+		dataToAppend = {'title': patient_name, 'start': date, 'end': date,'id':iduser, 'imageurl':"/static/profile/"+str(iduser)+".jpg"}
 		data['source'].append(dataToAppend)
 
 	dbConnect.commit()
 	dbConnect.close()
 
 	return HttpResponse(json.dumps(data))
+
+
+@login_required
+def ajax_getPatientData(request):
+	return HttpResponse("")
+
+
+
+
+@login_required
+def ajax_askWatson(request):
+	return HttpResponse("")
+
+
+
+
+@login_required
+def ajax_endAppointment(request):
+	return HttpResponse("")
+
+
+
+
+@login_required
+def ajax_saveUserData(request):
+	return HttpResponse("")
+
+
+
+
+@login_required
+def ajax_bookLab(request):
+	return HttpResponse("")
+
+
+@login_required
+def ajax_watsonDiseaseData(request):
+	return HttpResponse("")
 
 
