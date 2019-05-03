@@ -17,4 +17,13 @@ urlpatterns = [
 	path('ajax_checkUser/', views.ajax_checkUser, name='ajax_checkUser'),
 	path('ajax_makeAppointment/', views.ajax_makeAppointment, name='ajax_makeAppointment'),
 	path('ajax_getCalendar/', views.ajax_getCalendar, name='ajax_getCalendar'),
+
+	path('ajax_getPatientData/', views.ajax_getPatientData, name='ajax_getPatientData'),
+	path('ajax_askWatson/', views.ajax_askWatson, name='ajax_askWatson'),
+	path('ajax_endAppointment/', views.ajax_endAppointment, name='ajax_endAppointment'),
+	path('ajax_saveUserData/', views.ajax_saveUserData, name='ajax_saveUserData'),
+	path('ajax_bookLab/', views.ajax_bookLab, name='ajax_bookLab'),
+	path('ajax_watsonDiseaseData/', views.ajax_watsonDiseaseData, name='ajax_watsonDiseaseData'),
+
+
 ]

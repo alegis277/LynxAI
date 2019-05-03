@@ -22,6 +22,12 @@
 
 
 	<style type="text/css">
+
+		#main_body
+		{
+			display: none;
+		}
+
 		select#soflow {
 			-webkit-appearance: button;
 			-webkit-border-radius: 2px;
@@ -296,7 +302,7 @@
 
 
 
-	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 10;" id="main">
+	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 10;">
 
 		<div class="main-nav" style="cursor: pointer;">
 			
@@ -349,7 +355,7 @@
 
 
 
-	<label style="font-family: Helvetica;font-weight: 100;margin-top: 85px;display: block;font-size: 20px">Good morning, Dr. Óscar Andrés</label>
+	<label style="font-family: Helvetica;font-weight: 100;margin-top: 85px;display: block;font-size: 20px">Good morning, Dr. {{name}}</label>
 	<div id='calendar-container' style="height: 82vh;width: 450px;float: left;">
 
 		<div id='calendar' style="max-width: 450px;margin: 0 auto;float: left;font-family: Helvetica;font-weight: 100"></div>
@@ -367,37 +373,39 @@
 		}
 	</style>
 
+	<div id="main_initial" style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px;text-align: center;display: flex;justify-content: center;flex-direction: column;text-align: center;">
+		<label style="font-size: 30px;color: grey">Select a user to begin...</label>
+	</div>
 
 
 
-
-	<div style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px">
-		<label style="font-size: 35px;display: block;" id="campoNombre">Miguel Angel Díaz</label>
-		<label style="font-size: 20px;display: block;" id="campoNombre">El paciente presenta exceso de lamparocidad</label>
+	<div id="main_body" style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px">
+		<label style="font-size: 35px;display: block;" id="campoNombre">Loading...</label>
+		<label style="font-size: 20px;display: block;" id="campoQueja">Loading...</label>
 
 		<div style="margin-top:20px;display: flex;">
 
 
-			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(27,104,164)">
-				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Imbecilidad<br><label style="cursor: pointer;font-weight: 400;">101.2%</label></label>
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness1').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(232,69,65)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness1">-</label> <br><label id="percentage1" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 			</div>
-			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(37,192,84)">
-				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Sífilis<br><label style="cursor: pointer;font-weight: 400;">95.3%</label></label>
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness2').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(248,174,43)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness2">-</label> <br><label id="percentage2" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 			</div>
-			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(248,174,43)">
-				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Gonorrea<br><label style="cursor: pointer;font-weight: 400;">53.1%</label></label>
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness3').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(27,104,164)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness3">-</label> <br><label id="percentage3" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 			</div>
-			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(232,69,65)">
-				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">VIH<br><label style="cursor: pointer;font-weight: 400;">25.1%</label></label>
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness4').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:#38b0c3">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness4">-</label> <br><label id="percentage4" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 			</div>
-			<div onclick="modal_dis.style.display = 'block';" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:#38b0c3">
-				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;">Ebola<br><label style="cursor: pointer;font-weight: 400;">10.5%</label></label>
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness5').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(37,192,84)">
+				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness5">-</label> <br><label id="percentage5" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 
 			</div>
 
 
 
-			<div id="ask_watson" style="vertical-align: 10px;display: inline-block;text-align: center;width: 12%;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.28);border-radius: 10px;padding-top: 5px;padding-bottom: 5px;margin-left: 10px;"> 
+			<div onclick="ask_watson()" id="ask_watson" style="vertical-align: 10px;display: inline-block;text-align: center;width: 12%;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.28);border-radius: 10px;padding-top: 5px;padding-bottom: 5px;margin-left: 10px;"> 
 				<img src="{% static 'img/avatar_purple.png' %}" style="width: auto;height: 44px;margin: auto;"> <br>
 				<label style="font-size: 15px;cursor: pointer;">Ask Watson!</label>
 			</div>
@@ -409,7 +417,7 @@
 		<div style="width: 100%;margin-top: 20px;height: calc(100% - 190px)">
 
 			<div style="float: left;width: 50%;height: 100%">
-				<textarea placeholder="Write about patient symptoms" autocomplete="off" style="resize: none;float: left;"></textarea>
+				<textarea id="symptoms_ta" placeholder="Write about patient symptoms" autocomplete="off" style="resize: none;float: left;"></textarea>
 
 				<div class="button" style="margin-left: calc(106.75% - 10px - 150px);float: left;" id="ControllerConfig2">
 					<span>End Appointment</span>
@@ -423,10 +431,10 @@
 
 			<div style="float: right;width: 50%">
 				<ol class="rounded-list">
-					<li><a style="background-color: #ffffffa3 !important;">Age: 90</a></li>
-					<li><a style="background-color: #ffffffa3 !important;">Height: 200 cm</a></li>
-					<li><a style="background-color: #ffffffa3 !important;">Weight: 900 Kg</a></li>
-					<li><a style="background-color: #ffffffa3 !important;">Gender: Female</a></li>
+					<li><a style="background-color: #ffffffa3 !important;" id="age_main">Age: Loading...</a></li>
+					<li><a style="background-color: #ffffffa3 !important;" id="height_main">Height: Loading...</a></li>
+					<li><a style="background-color: #ffffffa3 !important;" id="weight_main">Weight: Loading...</a></li>
+					<li><a style="background-color: #ffffffa3 !important;" id="gender_main">Gender: Loading...</a></li>
 					<li><a style="color:#8c8c8c;background-color: #ffffffa3 !important;cursor: pointer;" onclick="modal_HCI.style.display = 'block';">Show more and edit...</a></li>
 				</ol>
 			</div>
@@ -466,11 +474,11 @@
 			<label style="font-family: Helvetica;font-size: 19px;display: inline-block;">To finish your current appointment, please enter details about the diagnosis</label>
 			<div style="margin-top: 40px;padding-right: 20px">
 				
-				<textarea placeholder="Write about your diagnosis..." autocomplete="off" style="resize: none;float: left;width: 100%;height: 260px"></textarea>
+				<textarea id="diagnosis_ta" placeholder="Write about your diagnosis..." autocomplete="off" style="resize: none;float: left;width: 100%;height: 260px"></textarea>
 
 
 
-				<div class="button" style="float: right;margin-top: 5px">
+				<div class="button" style="float: right;margin-top: 5px" onclick="end_appointment()">
 					<span>Save Data</span>
 					<svg>
 						<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
@@ -499,11 +507,11 @@
 
 			<span class="closeConfig">&times;</span>
 
-			<label style="font-family: Helvetica;font-size: 28px;margin-top: 9px;display: inline-block;">Disease Name</label>
+			<label id="watson_diseaseName" style="font-family: Helvetica;font-size: 28px;margin-top: 9px;display: inline-block;">Disease Name</label>
 			<div style="margin-top: 40px;padding-right: 20px">
 				
 
-				<label style="font-family: Helvetica;font-size: 18px;margin-top: 9px;display: inline-block;">Disease data</label>
+				<label id="watson_diseaseData" style="font-family: Helvetica;font-size: 18px;margin-top: 9px;display: inline-block;">Disease data</label>
 
 
 			</div>
@@ -535,12 +543,13 @@
 				<label style="margin-left: 100px;float: none;">Laboratory for the exam:</label>
 				<select id="soflow">
 					<option disabled selected>Select a Laboratory...</option>
-					<option>Laboratory 1</option>
-					<option>Laboratory 2</option>
+					{% for idlab,namelab in labs %}
+					<option id="{{idlab}}">{{namelab}}</option>
+					{% endfor %}
 				</select>
 
 				<label style="margin-left: 73px;float: none;">Exam specific requirements:</label>
-				<textarea placeholder="Exam requirements" autocomplete="off" style="resize: none;width: 283px;margin-left: 21px;vertical-align: top;height: 103px;"></textarea>
+				<textarea id="exam_req" placeholder="Exam requirements" autocomplete="off" style="resize: none;width: 283px;margin-left: 21px;vertical-align: top;height: 103px;"></textarea>
 
 
 				<label style="margin-left: 160px;float: none;margin-top: 13px;display: inline-block;">Exam start time:</label>
@@ -552,13 +561,14 @@
 					myPicker = new SimplePicker({zIndex: 1001});
 					myPicker.on('submit', function(date, readableDate){
 						$("#current_time").html(readableDate)
+						dateGlobal = date
 					})
 
 				</script>
 
 				<br>
 
-				<div class="button" style="float: right;margin-top: 50px;margin-right: -135px;">
+				<div onclick="book_lab()" class="button" style="float: right;margin-top: 50px;margin-right: -135px;">
 					<span>Book exam</span>
 					<svg>
 						<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
@@ -592,64 +602,64 @@
 			<div style="margin-top: 40px;padding-right: 20px">
 
 				<label style="margin-left: 152px;float: none;">Patient name:</label>
-				<textarea placeholder="Patient name" autocomplete="off" style="resize: none;width: 395px;margin-left: 21px;vertical-align: middle;height: 22px;"></textarea>
+				<textarea id="modalData_name" placeholder="Patient name" autocomplete="off" style="resize: none;width: 395px;margin-left: 21px;vertical-align: middle;height: 22px;"></textarea>
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;">Age:</label>
-				<textarea placeholder="Patient age" autocomplete="off" style="resize: none;width: 395px;margin-left: 84px;vertical-align: middle;height: 22px;"></textarea>
+				<textarea id="modalData_age" placeholder="Patient age" autocomplete="off" style="resize: none;width: 395px;margin-left: 84px;vertical-align: middle;height: 22px;"></textarea>
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;">Height:</label>
-				<textarea placeholder="Patient height" autocomplete="off" style="resize: none;width: 395px;margin-left: 67px;vertical-align: middle;height: 22px;"></textarea>
+				<textarea id="modalData_height" placeholder="Patient height" autocomplete="off" style="resize: none;width: 395px;margin-left: 67px;vertical-align: middle;height: 22px;"></textarea>
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;">Weight:</label>
-				<textarea placeholder="Patient weight" autocomplete="off" style="resize: none;width: 395px;margin-left: 64px;vertical-align: middle;height: 22px;"></textarea>
+				<textarea id="modalData_weight" placeholder="Patient weight" autocomplete="off" style="resize: none;width: 395px;margin-left: 64px;vertical-align: middle;height: 22px;"></textarea>
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;">Gender:</label>
-				<textarea placeholder="Patient gender" autocomplete="off" style="resize: none;width: 395px;margin-left: 60px;vertical-align: middle;height: 22px;"></textarea>
+				<textarea id="modalData_gender" placeholder="Patient gender" autocomplete="off" style="resize: none;width: 395px;margin-left: 60px;vertical-align: middle;height: 22px;"></textarea>
 
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;">Surgeries:</label>
-				<textarea placeholder="Patient surgeries" autocomplete="off" style="resize: none;width: 395px;margin-left: 45px;vertical-align: top;height: 88px;"></textarea>
+				<textarea id="modalData_surgeries" placeholder="Patient surgeries" autocomplete="off" style="resize: none;width: 395px;margin-left: 45px;vertical-align: top;height: 88px;"></textarea>
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;">Diseases:</label>
-				<textarea placeholder="Patient diseases" autocomplete="off" style="resize: none;width: 395px;margin-left: 49px;vertical-align: top;height: 88px;"></textarea>
+				<textarea id="modalData_diseases" placeholder="Patient diseases" autocomplete="off" style="resize: none;width: 395px;margin-left: 49px;vertical-align: top;height: 88px;"></textarea>
 
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;display: inline-block;width: 118px;">Family disease history:</label>
-				<textarea placeholder="Family disease history" autocomplete="off" style="resize: none;width: 395px;margin-left: 0px;vertical-align: top;height: 88px;"></textarea>
+				<textarea id="modalData_family_diseases" placeholder="Family disease history" autocomplete="off" style="resize: none;width: 395px;margin-left: 0px;vertical-align: top;height: 88px;"></textarea>
 
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;">Medication:</label>
-				<textarea placeholder="Patient medication" autocomplete="off" style="resize: none;width: 395px;margin-left: 34px;vertical-align: top;height: 88px;"></textarea>
+				<textarea id="modalData_medication" placeholder="Patient medication" autocomplete="off" style="resize: none;width: 395px;margin-left: 34px;vertical-align: top;height: 88px;"></textarea>
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;">Allergies:</label>
-				<textarea placeholder="Patient allergies" autocomplete="off" style="resize: none;width: 395px;margin-left: 51px;vertical-align: top;height: 88px;"></textarea>
+				<textarea id="modalData_allergies" placeholder="Patient allergies" autocomplete="off" style="resize: none;width: 395px;margin-left: 51px;vertical-align: top;height: 88px;"></textarea>
 
 
 				<br><br>
 
 				<label style="margin-left: 152px;float: none;display: inline-block;width: 118px;">Sexual disease history:</label>
-				<textarea placeholder="Sexual disease history" autocomplete="off" style="resize: none;width: 395px;margin-left: 0px;vertical-align: top;height: 88px;"></textarea>
+				<textarea id="modalData_sexual_diseases" placeholder="Sexual disease history" autocomplete="off" style="resize: none;width: 395px;margin-left: 0px;vertical-align: top;height: 88px;"></textarea>
 
-				<div class="button" style="float: right;margin-top: 124px">
-					<span>Save Changes</span>
+				<div onclick="save_user_data()" class="button" style="float: right;margin-top: 124px">
+					<span>Save All Changes</span>
 					<svg>
 						<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
 						<polyline class="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
@@ -690,22 +700,11 @@
 		      navLinks: false, // can click day/week names to navigate views
 		      editable: false,
 		      eventLimit: false, // allow "more" link when too many events
-		      events: [
+		      defaultTimedEventDuration : { hours:1 },
 
-
-
-		      {
-		      	id:'1234',
-		      	title: 'Miguel Angel Díaz',
-		      	start: '13:00:00',
-		      	end: '14:00:00',
-		      	imageurl:"{% static 'profile/nophoto.jpg' %}"
-		      },
-
-
-		      ],
+		      
 		      eventClick: function(calEvent, jsEvent, view) {
-		      	alert(calEvent.id);
+		      	set_user_data(calEvent.id, calEvent.id_appointment)
 		      },
 		      eventRender: function(event, eventElement) {
 		      	if (event.imageurl) {
@@ -773,7 +772,179 @@
 
 
 
+<script type="text/javascript">
+	id_doc_glob = {{id_doc}}
+	function update_calendar() {
 
+
+		doc_id = id_doc_glob
+
+		$.ajax('/ajax_getCalendar/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), doc_id:doc_id}, success: function(transport){
+
+			data = JSON.parse(transport)
+
+			glob=data.source
+
+			$("#calendar").fullCalendar( 'removeEvents' )
+			$("#calendar").fullCalendar( 'addEventSource', data.source )
+
+		}});
+
+		console.log("update_calendar")
+		
+	}
+
+	update_calendar()
+
+
+	global_id_actual = -1
+	global_id_appointment = -1
+
+	function set_user_data(idpat, id_app) {
+		global_id_actual = idpat
+		global_id_appointment = id_app
+
+		$("#main_initial").css({'display':'none'})
+		$("#main_body").css({'display':'block'})
+
+
+
+		$.ajax('/ajax_getPatientData/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:idpat, appointment_id:id_app}, success: function(transport){
+
+			data = JSON.parse(transport)
+
+			$("#campoNombre").html(data.name)
+			$("#campoQueja").html(data.complaint)
+			$("#symptoms_ta").val(data.symptoms)
+			$("#age_main").html("Age: "+data.age+" years")
+			$("#height_main").html("Height: "+data.height+ " cm")
+			$("#weight_main").html("Weight: "+data.weight+ " kg")
+			$("#gender_main").html("Gender: "+data.gender)
+
+			$("#modalData_name").val(data.name)
+			$("#modalData_age").val(data.age)
+			$("#modalData_height").val(data.height)
+			$("#modalData_weight").val(data.weight)
+			$("#modalData_gender").val(data.gender)
+			$("#modalData_surgeries").val(data.surgeries)
+			$("#modalData_diseases").val(data.diseases)
+			$("#modalData_family_diseases").val(data.family_diseases)
+			$("#modalData_medication").val(data.medication)
+			$("#modalData_allergies").val(data.allergies)
+			$("#modalData_sexual_diseases").val(data.sexual_diseases)
+
+			$("#diagnosis_ta").val(data.diagnosis)
+
+
+			
+			
+			
+
+			update_calendar()
+
+
+		}});
+		
+
+	}
+
+
+
+
+	function ask_watson() {
+
+		symptoms_ta = $("#symptoms_ta").val()
+
+		$.ajax('/ajax_askWatson/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), symptoms:symptoms_ta}, success: function(transport){
+
+			data = JSON.parse(transport)
+
+			$("#illness1").html(data.illness1)
+			$("#percentage1").html(data.percentage1)
+			$("#illness2").html(data.illness2)
+			$("#percentage2").html(data.percentage2)
+			$("#illness3").html(data.illness3)
+			$("#percentage3").html(data.percentage3)
+			$("#illness4").html(data.illness4)
+			$("#percentage4").html(data.percentage4)
+			$("#illness5").html(data.illness5)
+			$("#percentage5").html(data.percentage5)
+
+
+		}});
+
+		
+		
+	}
+
+
+	function end_appointment() {
+		
+		diagnosis = $("#diagnosis_ta").val()
+		symptoms = $("#symptoms_ta").val()
+
+		$.ajax('/ajax_endAppointment/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:global_id_actual, symptoms:symptoms, diagnosis:diagnosis, appointment_id:global_id_appointment}, success: function(transport){
+		}});
+
+		span3.click()
+	}
+
+
+	function save_user_data() {
+		name = $("#modalData_name").val()
+		age = $("#modalData_age").val()
+		height = $("#modalData_height").val()
+		weight = $("#modalData_weight").val()
+		gender = $("#modalData_gender").val()
+		surgeries = $("#modalData_surgeries").val()
+		diseases = $("#modalData_diseases").val()
+		family_diseases = $("#modalData_family_diseases").val()
+		medication = $("#modalData_medication").val()
+		allergies = $("#modalData_allergies").val()
+		sexual_diseases = $("#modalData_sexual_diseases").val()
+
+		diagnosis = $("#diagnosis_ta").val()
+		symptoms = $("#symptoms_ta").val()
+
+
+
+		$.ajax('/ajax_saveUserData/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:global_id_actual, name:name, age:age, height:height, weight:weight, gender:gender, surgeries:surgeries, diseases:diseases, family_diseases:family_diseases, medication:medication, allergies:allergies, sexual_diseases:sexual_diseases, diagnosis:diagnosis, symptom:symptoms, appointment_id:global_id_appointment}, success: function(transport){
+			set_user_data(global_id_actual, global_id_appointment)
+		}});
+
+		span_HCI.click()
+
+	}
+
+
+	function book_lab() {
+		lab_id = $('#soflow').find(":selected")[0].id
+		exam_req = $("#exam_req").val()
+		date_lab = dateGlobal.toLocaleString()
+		
+		$.ajax('/ajax_bookLab/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:global_id_actual, lab_id:lab_id, exam_req:exam_req, date_lab:date_lab}, success: function(transport){
+		}});
+
+		span_exam.click()
+
+	}
+
+	function updateIllness(illnessName) {
+		$("#watson_diseaseName").html(illnessName)
+
+		$.ajax('/ajax_watsonDiseaseData/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'),illnessName:illnessName}, success: function(transport){
+
+			data = JSON.parse(transport)
+
+			$("#watson_diseaseData").html(data.diseaseData)
+
+		}});
+
+
+		
+	}
+
+</script>
 
 
 
