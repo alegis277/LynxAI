@@ -386,19 +386,19 @@
 		<div style="margin-top:20px;display: flex;">
 
 
-			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness1').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(27,104,164)">
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness1').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(232,69,65)">
 				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness1">-</label> <br><label id="percentage1" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 			</div>
-			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness2').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(37,192,84)">
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness2').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(248,174,43)">
 				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness2">-</label> <br><label id="percentage2" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 			</div>
-			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness3').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(248,174,43)">
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness3').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(27,104,164)">
 				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness3">-</label> <br><label id="percentage3" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 			</div>
-			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness4').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(232,69,65)">
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness4').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:#38b0c3">
 				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness4">-</label> <br><label id="percentage4" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 			</div>
-			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness5').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:#38b0c3">
+			<div onclick="modal_dis.style.display = 'block';updateIllness($('#illness5').html())" class="illness_indicator" style="display: flex;align-items: center;text-align: center;height: 75px;width: 17%;background-color:rgb(37,192,84)">
 				<label style="cursor: pointer;margin: 0 auto;color: white;font-size: 22px;font-weight: 200;"> <label id="illness5">-</label> <br><label id="percentage5" style="cursor: pointer;font-weight: 400;"> - %</label></label>
 
 			</div>
@@ -700,13 +700,15 @@
 		      navLinks: false, // can click day/week names to navigate views
 		      editable: false,
 		      eventLimit: false, // allow "more" link when too many events
+		      defaultTimedEventDuration : { hours:1 },
+
 		      
 		      eventClick: function(calEvent, jsEvent, view) {
-		      	set_user_data(calEvent.id)
+		      	set_user_data(calEvent.id, calEvent.id_appointment)
 		      },
 		      eventRender: function(event, eventElement) {
 		      	if (event.imageurl) {
-		      		eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='90' height='90' style='float:right'>");
+		      		eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='40' height='40' style='float:right'>");
 		      	}
 		      },
 
@@ -771,11 +773,11 @@
 
 
 <script type="text/javascript">
-	id_dic_glob = {{id_doc}}
+	id_doc_glob = {{id_doc}}
 	function update_calendar() {
 
 
-		doc_id = id_dic_glob
+		doc_id = id_doc_glob
 
 		$.ajax('/ajax_getCalendar/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), doc_id:doc_id}, success: function(transport){
 
@@ -796,26 +798,28 @@
 
 
 	global_id_actual = -1
+	global_id_appointment = -1
 
-	function set_user_data(idpat) {
+	function set_user_data(idpat, id_app) {
 		global_id_actual = idpat
+		global_id_appointment = id_app
 
 		$("#main_initial").css({'display':'none'})
 		$("#main_body").css({'display':'block'})
 
 
 
-		$.ajax('/ajax_getPatientData/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:idpat}, success: function(transport){
+		$.ajax('/ajax_getPatientData/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:idpat, appointment_id:id_app}, success: function(transport){
 
 			data = JSON.parse(transport)
 
 			$("#campoNombre").html(data.name)
 			$("#campoQueja").html(data.complaint)
 			$("#symptoms_ta").val(data.symptoms)
-			$("#age_main").html(data.age)
-			$("#height_main").html(data.height)
-			$("#weight_main").html(data.weight)
-			$("#gender_main").html(data.gender)
+			$("#age_main").html("Age: "+data.age+" years")
+			$("#height_main").html("Height: "+data.height+ " cm")
+			$("#weight_main").html("Weight: "+data.weight+ " kg")
+			$("#gender_main").html("Gender: "+data.gender)
 
 			$("#modalData_name").val(data.name)
 			$("#modalData_age").val(data.age)
@@ -830,6 +834,13 @@
 			$("#modalData_sexual_diseases").val(data.sexual_diseases)
 
 			$("#diagnosis_ta").val(data.diagnosis)
+
+
+			
+			
+			
+
+			update_calendar()
 
 
 		}});
@@ -872,7 +883,7 @@
 		diagnosis = $("#diagnosis_ta").val()
 		symptoms = $("#symptoms_ta").val()
 
-		$.ajax('/ajax_endAppointment/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:global_id_actual, symptoms:symptoms, diagnosis:diagnosis}, success: function(transport){
+		$.ajax('/ajax_endAppointment/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:global_id_actual, symptoms:symptoms, diagnosis:diagnosis, appointment_id:global_id_appointment}, success: function(transport){
 		}});
 
 		span3.click()
@@ -897,9 +908,8 @@
 
 
 
-		$.ajax('/ajax_saveUserData/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:global_id_actual, name:name, age:age, height:height, weight:weight, gender:gender, surgeries:surgeries, diseases:diseases, family_diseases:family_diseases, medication:medication, allergies:allergies, sexual_diseases:sexual_diseases, diagnosis:diagnosis, symptom:symptoms}, success: function(transport){
-			set_user_data(global_id_actual)
-			update_calendar()
+		$.ajax('/ajax_saveUserData/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), patient_id:global_id_actual, name:name, age:age, height:height, weight:weight, gender:gender, surgeries:surgeries, diseases:diseases, family_diseases:family_diseases, medication:medication, allergies:allergies, sexual_diseases:sexual_diseases, diagnosis:diagnosis, symptom:symptoms, appointment_id:global_id_appointment}, success: function(transport){
+			set_user_data(global_id_actual, global_id_appointment)
 		}});
 
 		span_HCI.click()
