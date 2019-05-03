@@ -13,11 +13,12 @@ PATIENTS = 'patients'
 LABS = 'labs'
 BOOKING = 'booking'
 
+dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds", host = "isilo.db.elephantsql.com", port = "5432")
 
 @login_required
 def index(request):
 
-	dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds", host = "isilo.db.elephantsql.com", port = "5432")
+	
 	cursor=dbConnect.cursor()
 
 	userType = list(request.user.groups.values_list('name',flat=True))
@@ -25,7 +26,7 @@ def index(request):
 
 	if userType == MEDICS:
 		dbConnect.commit()
-		dbConnect.close()
+		cursor.close()
 		labs = list(User.objects.filter(groups__name='labs'))
 
 		labNames = [labActual.first_name for labActual in labs]
@@ -33,11 +34,11 @@ def index(request):
 		return render(request, 'medics.html', {'name':request.user.first_name+" "+request.user.last_name, 'id_doc' : str(request.user.id), 'labs':zip(labIds, labNames)})
 	elif userType == PATIENTS:
 		dbConnect.commit()
-		dbConnect.close()
+		cursor.close()
 		return render(request, 'patients.html')
 	elif userType == LABS:
 		dbConnect.commit()
-		dbConnect.close()
+		cursor.close()
 		return render(request, 'labs.html')
 
 
@@ -65,11 +66,11 @@ def index(request):
 
 
 		dbConnect.commit()
-		dbConnect.close()
+		cursor.close()
 		return render(request, 'booking.html', {'name':request.user.first_name+" "+request.user.last_name, 'doctors_related':doctors_related_final})
 
 	dbConnect.commit()
-	dbConnect.close()
+	cursor.close()
 	return render(request, 'unknown.html')
 
 @login_required
@@ -85,13 +86,13 @@ def ajax_checkUser(request):
 	id_check = str(request.POST['id_check'])
 
 
-	dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds", host = "isilo.db.elephantsql.com", port = "5432")
+	
 	cursor=dbConnect.cursor()
 	sql="SELECT first_name, last_name from auth_user where id=%s"
 	cursor.execute(sql,[id_check])
 	name = cursor.fetchall()
 	dbConnect.commit()
-	dbConnect.close()
+	cursor.close()
 
 
 	data = {}
@@ -110,12 +111,12 @@ def ajax_makeAppointment(request):
 	complaint = str(request.POST['complaint'])
 	date = str(request.POST['date'])
 
-	dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds", host = "isilo.db.elephantsql.com", port = "5432")
+	
 	cursor=dbConnect.cursor()
 	sql="INSERT into appointments (id_user, complaint, start_time, end_time, id_doctor) values (%s, %s, %s, %s, %s)"
 	cursor.execute(sql,[patient_id, complaint, date, date, doc_id])
 	dbConnect.commit()
-	dbConnect.close()
+	cursor.close()
 
 	return HttpResponse("")
 
@@ -126,7 +127,7 @@ def ajax_getCalendar(request):
 	doc_id = str(request.POST['doc_id'])
 
 
-	dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds", host = "isilo.db.elephantsql.com", port = "5432")
+	
 	cursor=dbConnect.cursor()
 	sql="SELECT (id_user, start_time, id_appointment) from appointments where id_doctor=%s"
 	cursor.execute(sql,[doc_id])
@@ -154,7 +155,7 @@ def ajax_getCalendar(request):
 		data['source'].append(dataToAppend)
 
 	dbConnect.commit()
-	dbConnect.close()
+	cursor.close()
 
 	return HttpResponse(json.dumps(data))
 
@@ -168,7 +169,7 @@ def ajax_getPatientData(request):
 
 
 
-	dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds", host = "isilo.db.elephantsql.com", port = "5432")
+	
 	cursor=dbConnect.cursor()
 
 	sql="SELECT first_name from auth_user where id=%s"
@@ -239,7 +240,7 @@ def ajax_getPatientData(request):
 	
 
 	dbConnect.commit()
-	dbConnect.close()
+	cursor.close()
 
 
 	return HttpResponse(json.dumps(data))
@@ -250,7 +251,7 @@ def ajax_getPatientData(request):
 @login_required
 def ajax_saveUserData(request):
 
-	dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds", host = "isilo.db.elephantsql.com", port = "5432")
+	
 	cursor=dbConnect.cursor()
 
 	patient_id = str(request.POST['patient_id'])
@@ -286,7 +287,7 @@ def ajax_saveUserData(request):
 
 
 	dbConnect.commit()
-	dbConnect.close()
+	cursor.close()
 
 	return HttpResponse("")
 
@@ -301,12 +302,12 @@ def ajax_bookLab(request):
 	exam_req = str(request.POST['exam_req'])
 	date_lab = str(request.POST['date_lab'])
 
-	dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds", host = "isilo.db.elephantsql.com", port = "5432")
+	
 	cursor=dbConnect.cursor()
 	sql="INSERT into exams (id_user, id_lab_user, start_time, end_time, requirements) values (%s, %s, %s, %s, %s)"
 	cursor.execute(sql,[patient_id, lab_id, date_lab, date_lab, exam_req])
 	dbConnect.commit()
-	dbConnect.close()
+	cursor.close()
 
 	return HttpResponse("")
 
@@ -321,12 +322,12 @@ def ajax_endAppointment(request):
 	symptoms = str(request.POST['symptoms'])
 	appointment_id = str(request.POST['appointment_id'])
 	
-	dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_v8zZfV-l5ahcv5AZWmNX9rnKd7zds", host = "isilo.db.elephantsql.com", port = "5432")
+	
 	cursor=dbConnect.cursor()
 	sql="UPDATE appointments set diagnosis=%s,symptoms=%s where id_appointment=%s;"
 	cursor.execute(sql,[diagnosis, symptoms, appointment_id])
 	dbConnect.commit()
-	dbConnect.close()
+	cursor.close()
 
 	trainWatson(symptoms, diagnosis)
 
