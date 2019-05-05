@@ -870,6 +870,17 @@
 			$("#illness5").html(data.illness5)
 			$("#percentage5").html(data.percentage5)
 
+			if (data.illness1.length > 12){$("#illness1").css({'font-size':'17px'})}
+			else{$("#illness1").css({'font-size':'22px'})}
+			if (data.illness2.length > 12){$("#illness2").css({'font-size':'17px'})}
+			else{$("#illness2").css({'font-size':'22px'})}
+			if (data.illness3.length > 12){$("#illness3").css({'font-size':'17px'})}
+			else{$("#illness3").css({'font-size':'22px'})}
+			if (data.illness4.length > 12){$("#illness4").css({'font-size':'17px'})}
+			else{$("#illness4").css({'font-size':'22px'})}
+			if (data.illness5.length > 12){$("#illness5").css({'font-size':'17px'})}
+			else{$("#illness5").css({'font-size':'22px'})}
+
 
 		}});
 
