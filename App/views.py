@@ -7,6 +7,11 @@ import psycopg2
 import simplejson as json
 from django.contrib.auth.models import User
 
+import numpy as np
+from watson_developer_cloud import NaturalLanguageUnderstandingV1
+from watson_developer_cloud.natural_language_understanding_v1 import Features, ConceptsOptions
+from watson_developer_cloud.natural_language_understanding_v1 import Features, KeywordsOptions
+
 # User type flags
 MEDICS = 'medics'
 PATIENTS = 'patients'
