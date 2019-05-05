@@ -4,3 +4,5 @@ mysqlclient
 gunicorn
 simplejson
 psycopg2-binary
+numpy
+watson_developer_cloud
