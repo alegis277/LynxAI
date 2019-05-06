@@ -288,7 +288,7 @@ def ajax_saveUserData(request):
 
 
 	sql="UPDATE hci set age=%s, height=%s, weight=%s, surgery=%s, current_illness=%s, family_diseases=%s, medication=%s, allergies=%s, sexual_history=%s, gender=%s where id_user=%s;"
-	cursor.execute(sql,[age, height, weight, surgeries, diseases, family_diseases, medication, allergies, sexual_diseases, gender, patient_id])
+	cursor.execute(sql,(age, height, weight, surgeries, diseases, family_diseases, medication, allergies, sexual_diseases, gender, patient_id,))
 
 
 	dbConnect.commit()
@@ -350,20 +350,20 @@ def ajax_askWatson(request):
 	
 	data = {}
 
-	data['illness1'] = watsonDiagnosis[0][0]
-	data['percentage1'] = str(watsonDiagnosis[0][1])+" %"
+	data['illness5'] = watsonDiagnosis[0][0]
+	data['percentage5'] = "%.2f %%"%(watsonDiagnosis[0][1])
 
-	data['illness2'] = watsonDiagnosis[1][0]
-	data['percentage2'] = str(watsonDiagnosis[1][1])+" %"
+	data['illness4'] = watsonDiagnosis[1][0]
+	data['percentage4'] = "%.2f %%"%(watsonDiagnosis[1][1])
 
 	data['illness3'] = watsonDiagnosis[2][0]
-	data['percentage3'] = str(watsonDiagnosis[2][1])+" %"
+	data['percentage3'] = "%.2f %%"%(watsonDiagnosis[2][1])
 
-	data['illness4'] = watsonDiagnosis[3][0]
-	data['percentage4'] = str(watsonDiagnosis[3][1])+" %"
+	data['illness2'] = watsonDiagnosis[3][0]
+	data['percentage2'] = "%.2f %%"%(watsonDiagnosis[3][1])
 
-	data['illness5'] = watsonDiagnosis[4][0]
-	data['percentage5'] = str(watsonDiagnosis[4][1])+" %"
+	data['illness1'] = watsonDiagnosis[4][0]
+	data['percentage1'] = "%.2f %%"%(watsonDiagnosis[4][1])
 
 	return HttpResponse(json.dumps(data))
 
@@ -393,12 +393,179 @@ def trainWatson(symptoms, diagnosis):
 
 def askIllnessDefinition(diseaseName):
 
-	return "Disease definition for "+diseaseName
+	cursor1=dbConnect.cursor()
+	sql= "SELECT * from watson"
+
+	cursor1.execute(sql)
+	watson_symptoms = cursor1.fetchall()
+
+	Diseases = []
+
+	#in_sympotoms = ['"fatigue"','"tired"','"feeling unwell"','"mkadas"']
+	in_sympotoms=PalabrasClave
+	for row_s in PalabrasClave:
+		for row in watson_symptoms:
+			if row[1] == row_s:
+				Diseases.append(row[2])
+
+	num_of_diseases = []
+	num_of_symptoms = []
+
+	for row_s in Diseases:
+		num = 0;
+		for row in watson_symptoms:
+			if row[2] == row_s:
+				num += 1
+		num_of_symptoms.append(num)
+		num2 = 0;
+		for row in Diseases:
+			if row == row_s:
+				num2 += 1
+		num_of_diseases.append(num2)
+	n = 0
+	data_out = []
+	for row_s in Diseases:
+
+		x = True
+		for i in range(n):
+			if Diseases[n] == Diseases[i]:
+				x = False
+
+		if x == True:
+			data_out.append([row_s,(num_of_diseases[n]/num_of_symptoms[n])*100])
+		n += 1
+
+	for i in data_out:
+		for j in data_out:
+			if j[1] > i[1]:
+				max_percent = j[0]  # enfermedad con la mayor probabilidad
+
+	Extra_symptoms2 = []
+	#for z in data_out:
+	for z in Real_Data_Out:
+		Extra_symptoms = []
+		for row in watson_symptoms:
+
+			x = True
+			for row_s in in_sympotoms:
+				if row_s == row[1]:
+					x = False
+			if x == True and row[2] == z[0]:
+				Extra_symptoms.append(row[1])
+		Extra_symptoms2.append(Extra_symptoms)
+	i=0
+	while i<5:
+		if Real_Data_Out[i][0]== diseaseName:
+			#print (Real_Data_Out[i][0])
+			#print (Extra_symptoms2[i])
+			return ('Be cautious if the patient shows one of the following symptoms: <br> <br> <br>',Extra_symptoms2[i])
+		i=i+1
+	#print('Estar pendiente de:',Extra_symptoms2[0])
+	#print('Estar pendiente de:',Extra_symptoms2[1])
+
+	dbConnect.commit()
+	cursor1.close()
 
 def askWatsonDiagnosis(symptoms):
 
+	global Real_Data_Out
+	global PalabrasClave
+	informacion=[]
+	natural_language_understanding = NaturalLanguageUnderstandingV1(
+		version='2018-11-16',
+		iam_apikey='Pam5AQPn6A9Zd1R0h01vnbwPxvvNaThARMJozSGqGYxp',
+		url='https://gateway.watsonplatform.net/natural-language-understanding/api')
 
-	return [['Illness 1', 100],['Illness 2', 90.3],['Illness 3', 56.5],['Illness 4', 10.4],['Illness 5', 5.1]] #From largest to smallest probability
+	natural_language_understanding.set_detailed_response(True)
+	#response = natural_language_understanding.analyze(
+	#   text=Texto,
+	#    features=Features(concepts=ConceptsOptions(limit=nume))).get_result()
+	response = natural_language_understanding.analyze(
+		text=symptoms,
+		features=Features(keywords=KeywordsOptions(sentiment=True,emotion=True,limit=5))).get_result()
+	#print(json.dumps(response,indent=2))
+	#print(json.dumps(response['concepts'][4]['text']))
+	i=0
+	PalabrasClave=[]
+	#PaginasInformacion=[]
+	while i<5:
+		PalabrasClave.append(json.dumps(response['keywords'][i]['text']))
+	#    PaginasInformacion.append(json.dumps(response['concepts'][i]['dbpedia_resource']))
+		i=i+1
 
+	i=0
+	while i<5:
+		PalabrasClave[i]=PalabrasClave[i].replace('"','')
+		i=i+1
+	#print (PalabrasClave)
 
+	cursor1=dbConnect.cursor()
+	sql= "SELECT * from watson"
+
+	cursor1.execute(sql)
+	watson_symptoms = cursor1.fetchall()
+
+	Diseases = []
+
+	#in_sympotoms = ['"fatigue"','"tired"','"feeling unwell"','"mkadas"']
+
+	for row_s in PalabrasClave:
+		for row in watson_symptoms:
+			if row[1] == row_s:
+				Diseases.append(row[2])
+
+	num_of_diseases = []
+	num_of_symptoms = []
+
+	for row_s in Diseases:
+		num = 0;
+		for row in watson_symptoms:
+			if row[2] == row_s:
+				num += 1
+		num_of_symptoms.append(num)
+		num2 = 0;
+		for row in Diseases:
+			if row == row_s:
+				num2 += 1
+		num_of_diseases.append(num2)
+	n = 0
+	data_out = []
+	for row_s in Diseases:
+
+		x = True
+		for i in range(n):
+			if Diseases[n] == Diseases[i]:
+				x = False
+
+		if x == True:
+			data_out.append([row_s,(num_of_diseases[n]/num_of_symptoms[n])*100])
+		n += 1
+
+	for i in data_out:
+		#print("la probabilidad de tener",i[0],"es de un",i[1],"%")
+		informacion.append(i[0])
+		informacion.append(i[1])
+
+	for i in data_out:
+		for j in data_out:
+			if j[1] > i[1]:
+				max_percent = j[0]  # enfermedad con la mayor probabilidad
+
+	data = []
+	for i in data_out:
+		data.append(i[1])
+	# print("la probabilidad de tener",i[0],"es de un",i[1],"%")
+	organiced_data = sorted(data)
+
+	Real_Data_Out = []  # dator ordenados de enfermedad y probabilidad
+	for i in organiced_data:
+		for j in data_out:
+			if i == j[1]:
+				Real_Data_Out.append(j)
+
+	dbConnect.commit()
+	cursor1.close()
+	#print(Real_Data_Out)
+	#print(PalabrasClave)
+	return Real_Data_Out
 
