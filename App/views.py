@@ -6,6 +6,7 @@ from django.contrib.auth import logout
 import psycopg2
 import simplejson as json
 from django.contrib.auth.models import User
+from ast import literal_eval
 
 import numpy as np
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
@@ -144,10 +145,10 @@ def ajax_getCalendar(request):
 	for data_database in iduser_date:
 
 		string_base = data_database[0]
-		string_base = string_base.strip('(').strip(')').split(',')
+		string_base = literal_eval(string_base)
 
 		iduser = string_base[0]
-		date = string_base[1].strip('"')
+		date = string_base[1]
 		idappointment = string_base[2]
 
 		sql="SELECT first_name, last_name from auth_user where id=%s"
@@ -193,11 +194,11 @@ def ajax_getPatientData(request):
 	for data_database in complaint_symptoms_diagnosis:
 
 		string_base = data_database[0]
-		string_base = string_base.strip('(').strip(')').split(',')
+		string_base = literal_eval(string_base)
 
-		complaint = string_base[0].strip('"')
-		symptoms = string_base[1].strip('"')
-		diagnosis = string_base[2].strip('"')
+		complaint = string_base[0]
+		symptoms = string_base[1]
+		diagnosis = string_base[2]
 
 
 	sql="SELECT (age, height, weight, surgery, current_illness, family_diseases, medication, allergies, sexual_history, gender) from hci where id_user=%s"
@@ -210,18 +211,18 @@ def ajax_getPatientData(request):
 	for data_database in all_data_HCI:
 
 		string_base = data_database[0]
-		string_base = string_base.strip('(').strip(')').split(',')
+		string_base = literal_eval(string_base)
 
-		age = string_base[0].strip('"')
-		height = string_base[1].strip('"')
-		weight = string_base[2].strip('"')
-		surgeries = string_base[3].strip('"')
-		diseases = string_base[4].strip('"')
-		family_diseases = string_base[5].strip('"')
-		medication = string_base[6].strip('"')
-		allergies = string_base[7].strip('"')
-		sexual_diseases = string_base[8].strip('"')
-		gender = string_base[9].strip('"')
+		age = string_base[0]
+		height = string_base[1]
+		weight = string_base[2]
+		surgeries = string_base[3]
+		diseases = string_base[4]
+		family_diseases = string_base[5]
+		medication = string_base[6]
+		allergies = string_base[7]
+		sexual_diseases = string_base[8]
+		gender = string_base[9]
 
 
 	data = {}
