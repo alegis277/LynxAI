@@ -408,7 +408,7 @@ def ajax_getCalendarLab(request):
 	dbConnect.commit()
 	cursor.close()
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 
 
