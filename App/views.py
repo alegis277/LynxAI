@@ -6,7 +6,6 @@ from django.contrib.auth import logout
 import psycopg2
 import simplejson as json
 from django.contrib.auth.models import User
-from ast import literal_eval
 
 import numpy as np
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
@@ -135,7 +134,7 @@ def ajax_getCalendar(request):
 
 	
 	cursor=dbConnect.cursor()
-	sql="SELECT (id_user, start_time, id_appointment) from appointments where id_doctor=%s"
+	sql="SELECT id_user, start_time, id_appointment from appointments where id_doctor=%s"
 	cursor.execute(sql,[doc_id])
 	iduser_date = cursor.fetchall()
 
@@ -145,7 +144,6 @@ def ajax_getCalendar(request):
 	for data_database in iduser_date:
 
 		string_base = data_database[0]
-		string_base = literal_eval(string_base)
 
 		iduser = string_base[0]
 		date = string_base[1]
@@ -184,7 +182,7 @@ def ajax_getPatientData(request):
 	patient_name = name[0][0]
 
 
-	sql="SELECT (complaint, symptoms, diagnosis) from appointments where id_appointment=%s"
+	sql="SELECT complaint, symptoms, diagnosis from appointments where id_appointment=%s"
 	cursor.execute(sql,[appointment_id])
 	complaint_symptoms_diagnosis = cursor.fetchall()
 
@@ -194,14 +192,13 @@ def ajax_getPatientData(request):
 	for data_database in complaint_symptoms_diagnosis:
 
 		string_base = data_database[0]
-		string_base = literal_eval(string_base)
 
 		complaint = string_base[0]
 		symptoms = string_base[1]
 		diagnosis = string_base[2]
 
 
-	sql="SELECT (age, height, weight, surgery, current_illness, family_diseases, medication, allergies, sexual_history, gender) from hci where id_user=%s"
+	sql="SELECT age, height, weight, surgery, current_illness, family_diseases, medication, allergies, sexual_history, gender from hci where id_user=%s"
 	cursor.execute(sql,[patient_id])
 	all_data_HCI = cursor.fetchall()
 
@@ -211,7 +208,6 @@ def ajax_getPatientData(request):
 	for data_database in all_data_HCI:
 
 		string_base = data_database[0]
-		string_base = literal_eval(string_base)
 
 		age = string_base[0]
 		height = string_base[1]
