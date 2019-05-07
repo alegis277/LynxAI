@@ -24,7 +24,9 @@ urlpatterns = [
 	path('ajax_saveUserData/', views.ajax_saveUserData, name='ajax_saveUserData'),
 	path('ajax_bookLab/', views.ajax_bookLab, name='ajax_bookLab'),
 	path('ajax_watsonDiseaseData/', views.ajax_watsonDiseaseData, name='ajax_watsonDiseaseData'),
+
 	path('ajax_getCalendarLab/', views.ajax_getCalendarLab, name='ajax_getCalendarLab'),
+	path('ajax_getExamInfo/', views.ajax_getExamInfo, name='ajax_getExamInfo'),
 
 
 ]
