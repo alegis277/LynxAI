@@ -12,6 +12,8 @@ from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 import Features, ConceptsOptions
 from watson_developer_cloud.natural_language_understanding_v1 import Features, KeywordsOptions
 
+from datetime import date, datetime
+
 # User type flags
 MEDICS = 'medics'
 PATIENTS = 'patients'
@@ -106,7 +108,7 @@ def ajax_checkUser(request):
 	else:
 		data['patient_name'] = "Not found"
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 @login_required
 def ajax_makeAppointment(request):
@@ -134,7 +136,7 @@ def ajax_getCalendar(request):
 
 
 	cursor=dbConnect.cursor()
-	sql="SELECT (id_user, start_time, id_appointment) from appointments where id_doctor=%s"
+	sql="SELECT id_user, start_time, id_appointment from appointments where id_doctor=%s"
 	cursor.execute(sql,[doc_id])
 	iduser_date = cursor.fetchall()
 
@@ -143,11 +145,10 @@ def ajax_getCalendar(request):
 
 	for data_database in iduser_date:
 
-		string_base = data_database[0]
-		string_base = string_base.strip('(').strip(')').split(',')
+		string_base = data_database
 
 		iduser = string_base[0]
-		date = string_base[1].strip('"')
+		date = string_base[1]
 		idappointment = string_base[2]
 
 		sql="SELECT first_name, last_name from auth_user where id=%s"
@@ -162,7 +163,7 @@ def ajax_getCalendar(request):
 	dbConnect.commit()
 	cursor.close()
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 
 @login_required
@@ -183,7 +184,7 @@ def ajax_getPatientData(request):
 	patient_name = name[0][0]
 
 
-	sql="SELECT (complaint, symptoms, diagnosis) from appointments where id_appointment=%s"
+	sql="SELECT complaint, symptoms, diagnosis from appointments where id_appointment=%s"
 	cursor.execute(sql,[appointment_id])
 	complaint_symptoms_diagnosis = cursor.fetchall()
 
@@ -192,15 +193,14 @@ def ajax_getPatientData(request):
 
 	for data_database in complaint_symptoms_diagnosis:
 
-		string_base = data_database[0]
-		string_base = string_base.strip('(').strip(')').split(',')
+		string_base = data_database
 
-		complaint = string_base[0].strip('"')
-		symptoms = string_base[1].strip('"')
-		diagnosis = string_base[2].strip('"')
+		complaint = string_base[0]
+		symptoms = string_base[1]
+		diagnosis = string_base[2]
 
 
-	sql="SELECT (age, height, weight, surgery, current_illness, family_diseases, medication, allergies, sexual_history, gender) from hci where id_user=%s"
+	sql="SELECT age, height, weight, surgery, current_illness, family_diseases, medication, allergies, sexual_history, gender from hci where id_user=%s"
 	cursor.execute(sql,[patient_id])
 	all_data_HCI = cursor.fetchall()
 
@@ -209,19 +209,18 @@ def ajax_getPatientData(request):
 
 	for data_database in all_data_HCI:
 
-		string_base = data_database[0]
-		string_base = string_base.strip('(').strip(')').split(',')
+		string_base = data_database
 
-		age = string_base[0].strip('"')
-		height = string_base[1].strip('"')
-		weight = string_base[2].strip('"')
-		surgeries = string_base[3].strip('"')
-		diseases = string_base[4].strip('"')
-		family_diseases = string_base[5].strip('"')
-		medication = string_base[6].strip('"')
-		allergies = string_base[7].strip('"')
-		sexual_diseases = string_base[8].strip('"')
-		gender = string_base[9].strip('"')
+		age = string_base[0]
+		height = string_base[1]
+		weight = string_base[2]
+		surgeries = string_base[3]
+		diseases = string_base[4]
+		family_diseases = string_base[5]
+		medication = string_base[6]
+		allergies = string_base[7]
+		sexual_diseases = string_base[8]
+		gender = string_base[9]
 
 
 	data = {}
@@ -248,7 +247,7 @@ def ajax_getPatientData(request):
 	cursor.close()
 
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 
 
@@ -365,7 +364,7 @@ def ajax_askWatson(request):
 	data['illness1'] = watsonDiagnosis[4][0]
 	data['percentage1'] = "%.2f %%"%(watsonDiagnosis[4][1])
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 
 
@@ -378,7 +377,7 @@ def ajax_watsonDiseaseData(request):
 	data = {}
 	data['diseaseData'] = askIllnessDefinition(illness)
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 @login_required
 def ajax_getCalendarLab(request):
@@ -410,7 +409,6 @@ def ajax_getCalendarLab(request):
 	cursor.close()
 
 	return HttpResponse(json.dumps(data))
-
 
 
 
@@ -599,3 +597,10 @@ def askWatsonDiagnosis(symptoms):
 	#print(Real_Data_Out)
 	#print(PalabrasClave)
 	return Real_Data_Out
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError ("Type %s not serializable" % type(obj))
