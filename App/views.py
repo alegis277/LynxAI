@@ -411,6 +411,46 @@ def ajax_getCalendarLab(request):
 	return HttpResponse(json.dumps(data, default=json_serial))
 
 
+@login_required
+def ajax_getExamInfo(request):
+
+	id_exam = str(request.POST['id_lab'])
+
+	cursor=dbConnect.cursor()
+
+
+	sql="SELECT id_user, requirements from exams where id_exam = %s"
+	cursor.execute(sql,[id_exam])
+	ids = cursor.fetchall()
+
+	patient_requirements = ids[0][1]
+
+	sql2 = "SELECT first_name, last_name from auth_user where id = %s"
+	cursor.execute(sql2, [ids[0][0]])
+	nameu = cursor.fetchall()
+
+	patient_name = nameu[0][0] + " "+ nameu[0][1]
+
+
+
+	sql="SELECT age, height, weight, gender from hci where id_user=%s"
+	cursor.execute(sql, [ids[0][0]])
+	hci_data = cursor.fetchall()
+
+
+	data = {}
+
+	data['patient_name'] = patient_name
+	data['patient_requirements'] = patient_requirements
+	data['age'] = hci_data[0][0]
+	data['height'] = hci_data[0][1]
+	data['weight'] = hci_data[0][2]
+	data['gender'] = hci_data[0][3]
+
+	dbConnect.commit()
+	cursor.close()
+
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 
 ### WATSON FUNCTIONS ###

@@ -356,7 +356,7 @@
 	</style>
 	<div style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px">
 		<label style="font-size: 35px;display: block;" id="campoNombre">Loading...</label>
-		<label style="font-size: 20px;display: block;" id="campoExamen">Loading...</label>
+		<label style="font-size: 20px;display: block;" id="campoRequerimientos">Loading...</label>
 		<div style="width: 100%;margin-top: 20px;height: calc(100% - 190px)">
 
 			<div style="float: left;width: 50%;height: 100%">
@@ -372,10 +372,10 @@
 			</div>
 			<div style="float: right;width: 50%">
 				<ol class="rounded-list">
-					<li><a style="background-color: #ffffffa3 !important;">Age: 90</a></li>
-					<li><a style="background-color: #ffffffa3 !important;">Height: 200 cm</a></li>
-					<li><a style="background-color: #ffffffa3 !important;">Weight: 900 Kg</a></li>
-					<li><a style="background-color: #ffffffa3 !important;">Gender: Female</a></li>
+					<li><a style="background-color: #ffffffa3 !important;" id="age_main">Loading...</a></li>
+					<li><a style="background-color: #ffffffa3 !important;" id="height_main">Loading...</a></li>
+					<li><a style="background-color: #ffffffa3 !important;" id="weight_main">Loading...</a></li>
+					<li><a style="background-color: #ffffffa3 !important;" id="gender_main">Loading...</a></li>
 					<li><a style="color:#8c8c8c;background-color: #ffffffa3 !important;cursor: pointer;" onclick="modal_HCI.style.display = 'block';">Show more and edit...</a></li>
 				</ol>
 			</div>
@@ -404,13 +404,15 @@
 		      height: "parent",
 		      contentHeight: "parent",
 
+					defaultTimedEventDuration : {hours:1},
+
 		      defaultView: 'agendaDay',
 		      navLinks: false, // can click day/week names to navigate views
 		      editable: false,
 		      eventLimit: false, // allow "more" link when too many events
 
 		      eventClick: function(calEvent, jsEvent, view) {
-		      	alert(calEvent.id);
+		      	updateInfo(calEvent.id_exam);
 		      },
 		      eventRender: function(event, eventElement) {
 		      	if (event.imageurl) {
@@ -440,6 +442,23 @@ function update_calendar() {
 
 		$("#calendar").fullCalendar( 'removeEvents' )
 		$("#calendar").fullCalendar( 'addEventSource', data.source )
+
+	}});
+
+}
+
+function updateInfo(id_in) {
+
+	$.ajax('/ajax_getExamInfo/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), id_lab:id_in}, success: function(transport){
+
+		data = JSON.parse(transport)
+
+		$("#campoNombre").html(data.patient_name)
+		$("#campoRequerimientos").html(data.patient_requirements)
+		$("#age_main").html("Age: "+data.age+" years")
+		$("#height_main").html("Height: "+data.height+ " cm")
+		$("#weight_main").html("Weight: "+data.weight+ " kg")
+		$("#gender_main").html("Gender: "+data.gender)
 
 	}});
 
