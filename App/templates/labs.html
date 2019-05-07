@@ -336,7 +336,7 @@
 	</div>
 
 
-	<label style="font-family: Helvetica;font-weight: 100;margin-top: 85px;display: block;font-size: 20px">Good morning, Javeriana Lab.</label>
+	<label style="font-family: Helvetica;font-weight: 100;margin-top: 85px;display: block;font-size: 20px">Good morning, {{name}}</label>
 	<div id='calendar-container' style="height: 82vh;width: 450px;float: left;">
 
 		<div id='calendar' style="max-width: 450px;margin: 0 auto;float: left;font-family: Helvetica;font-weight: 100">
@@ -355,8 +355,8 @@
 		}
 	</style>
 	<div style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px">
-		<label style="font-size: 35px;display: block;" id="campoNombre">Miguel Angel Díaz</label>
-		<label style="font-size: 20px;display: block;" id="campoNombre">El paciente presenta exceso de lamparocidad</label>
+		<label style="font-size: 35px;display: block;" id="campoNombre">Loading...</label>
+		<label style="font-size: 20px;display: block;" id="campoExamen">Loading...</label>
 		<div style="width: 100%;margin-top: 20px;height: calc(100% - 190px)">
 
 			<div style="float: left;width: 50%;height: 100%">
@@ -388,7 +388,7 @@
 
 
 </body>
-<!-- <script> 
+<script>
 
 	$(document).ready(function() {
 
@@ -408,20 +408,7 @@
 		      navLinks: false, // can click day/week names to navigate views
 		      editable: false,
 		      eventLimit: false, // allow "more" link when too many events
-		      events: [
 
-
-
-		      {
-		      	id:'1234',
-		      	title: 'Miguel Angel Díaz',
-		      	start: '13:00:00',
-		      	end: '14:00:00',
-		      	imageurl:"{% static 'profile/nophoto.jpg' %}"
-		      },
-
-
-		      ],
 		      eventClick: function(calEvent, jsEvent, view) {
 		      	alert(calEvent.id);
 		      },
@@ -435,54 +422,31 @@
 
 	});
 
-</script> -->
-<!-- <script type="text/javascript">
-	modal3 = document.getElementById('ModalConfig2');
-	btn3 = document.getElementById("ControllerConfig2");
-	span3 = document.getElementsByClassName("closeConfig")[0];
-
-	modal_dis = document.getElementById('ModalConfig_dis');
-	span_dis = document.getElementsByClassName("closeConfig")[1];
-
-	modal_exam = document.getElementById('ModalConfig_exam');
-	span_exam = document.getElementsByClassName("closeConfig")[2];
-
-	modal_HCI = document.getElementById('ModalConfig_HCI');
-	span_HCI = document.getElementsByClassName("closeConfig")[3];
+</script>
 
 
-	btn3.onclick = function() {
-		modal3.style.display = "block";
-	}
+
+<script>
 
 
-	span3.onclick = function() {
-		modal3.style.display = "none";
-	}
-	span_dis.onclick = function() {
-		modal_dis.style.display = "none";
-	}
-	span_exam.onclick = function() {
-		modal_exam.style.display = "none";
-	}
-	span_HCI.onclick = function() {
-		modal_HCI.style.display = "none";
-	}
+function update_calendar() {
 
 
-	window.onclick = function(event) {
-		if (event.target == modal3) {
-			modal3.style.display = "none";
-		}
-		if (event.target == modal_dis) {
-			modal_dis.style.display = "none";
-		}
-		if (event.target == modal_exam) {
-			modal_exam.style.display = "none";
-		}
-		if (event.target == modal_HCI) {
-			modal_HCI.style.display = "none";
-		}
-	}
-</script> -->
+	$.ajax('/ajax_getCalendarLab/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken')}, success: function(transport){
+
+		data = JSON.parse(transport)
+
+		glob=data.source
+
+		$("#calendar").fullCalendar( 'removeEvents' )
+		$("#calendar").fullCalendar( 'addEventSource', data.source )
+
+	}});
+
+}
+
+update_calendar()
+
+</script>
+
 </html>

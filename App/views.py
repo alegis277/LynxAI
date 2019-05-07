@@ -23,7 +23,7 @@ dbConnect = psycopg2.connect(database="djfdlbhx", user="djfdlbhx", password="Pm_
 @login_required
 def index(request):
 
-	
+
 	cursor=dbConnect.cursor()
 
 	userType = list(request.user.groups.values_list('name',flat=True))
@@ -44,7 +44,7 @@ def index(request):
 	elif userType == LABS:
 		dbConnect.commit()
 		cursor.close()
-		return render(request, 'labs.html')
+		return render(request, 'labs.html', {'name':request.user.first_name+" "+request.user.last_name, 'id_lab' : str(request.user.id)})
 
 
 
@@ -91,7 +91,7 @@ def ajax_checkUser(request):
 	id_check = str(request.POST['id_check'])
 
 
-	
+
 	cursor=dbConnect.cursor()
 	sql="SELECT first_name, last_name from auth_user where id=%s"
 	cursor.execute(sql,[id_check])
@@ -116,7 +116,7 @@ def ajax_makeAppointment(request):
 	complaint = str(request.POST['complaint'])
 	date = str(request.POST['date'])
 
-	
+
 	cursor=dbConnect.cursor()
 	sql="INSERT into appointments (id_user, complaint, start_time, end_time, id_doctor) values (%s, %s, %s, %s, %s)"
 	cursor.execute(sql,[patient_id, complaint, date, date, doc_id])
@@ -132,7 +132,7 @@ def ajax_getCalendar(request):
 	doc_id = str(request.POST['doc_id'])
 
 
-	
+
 	cursor=dbConnect.cursor()
 	sql="SELECT (id_user, start_time, id_appointment) from appointments where id_doctor=%s"
 	cursor.execute(sql,[doc_id])
@@ -155,7 +155,7 @@ def ajax_getCalendar(request):
 		name = cursor.fetchall()
 		patient_name = name[0][0] + " "+ name[0][1]
 
-		
+
 		dataToAppend = {'title': patient_name, 'start': date, 'end': date,'id':iduser, 'imageurl':"/static/profile/"+str(iduser)+".jpg", 'id_appointment':idappointment}
 		data['source'].append(dataToAppend)
 
@@ -174,7 +174,7 @@ def ajax_getPatientData(request):
 
 
 
-	
+
 	cursor=dbConnect.cursor()
 
 	sql="SELECT first_name from auth_user where id=%s"
@@ -242,7 +242,7 @@ def ajax_getPatientData(request):
 	data['medication'] = medication
 	data['allergies'] = allergies
 	data['sexual_diseases'] = sexual_diseases
-	
+
 
 	dbConnect.commit()
 	cursor.close()
@@ -256,7 +256,7 @@ def ajax_getPatientData(request):
 @login_required
 def ajax_saveUserData(request):
 
-	
+
 	cursor=dbConnect.cursor()
 
 	patient_id = str(request.POST['patient_id'])
@@ -277,8 +277,8 @@ def ajax_saveUserData(request):
 	allergies = str(request.POST['allergies'])
 	sexual_diseases = str(request.POST['sexual_diseases'])
 	gender = str(request.POST['gender'])
-	
-	
+
+
 	sql="UPDATE auth_user set first_name=%s where id=%s;"
 	cursor.execute(sql,[name, patient_id])
 
@@ -307,7 +307,7 @@ def ajax_bookLab(request):
 	exam_req = str(request.POST['exam_req'])
 	date_lab = str(request.POST['date_lab'])
 
-	
+
 	cursor=dbConnect.cursor()
 	sql="INSERT into exams (id_user, id_lab_user, start_time, end_time, requirements) values (%s, %s, %s, %s, %s)"
 	cursor.execute(sql,[patient_id, lab_id, date_lab, date_lab, exam_req])
@@ -326,8 +326,8 @@ def ajax_endAppointment(request):
 	diagnosis = str(request.POST['diagnosis'])
 	symptoms = str(request.POST['symptoms'])
 	appointment_id = str(request.POST['appointment_id'])
-	
-	
+
+
 	cursor=dbConnect.cursor()
 	sql="UPDATE appointments set diagnosis=%s,symptoms=%s where id_appointment=%s;"
 	cursor.execute(sql,[diagnosis, symptoms, appointment_id])
@@ -347,7 +347,7 @@ def ajax_askWatson(request):
 	symptoms = str(request.POST['symptoms'])
 
 	watsonDiagnosis = askWatsonDiagnosis(symptoms)
-	
+
 	data = {}
 
 	data['illness5'] = watsonDiagnosis[0][0]
@@ -377,7 +377,38 @@ def ajax_watsonDiseaseData(request):
 
 	data = {}
 	data['diseaseData'] = askIllnessDefinition(illness)
-	
+
+	return HttpResponse(json.dumps(data))
+
+@login_required
+def ajax_getCalendarLab(request):
+
+	lab_id = str(request.user.id)
+
+
+
+	cursor=dbConnect.cursor()
+	sql="SELECT id_user, id_exam, start_time from exams where id_lab_user = %s"
+	cursor.execute(sql,[lab_id])
+	ids = cursor.fetchall()
+
+	data = {}
+	data['source'] = []
+
+	for inf in ids:
+		sql2 = "SELECT first_name, last_name from auth_user where id = %s"
+		cursor.execute(sql2, [inf[0]])
+		idu = cursor.fetchall()
+
+		patient_name = idu[0][0] + " "+ idu[0][1]
+
+
+		dataToAppend = {'title': patient_name, 'start': inf[2], 'end': inf[2],'id':inf[0], 'imageurl':"/static/profile/"+str(inf[0])+".jpg", 'id_exam':inf[1]}
+		data['source'].append(dataToAppend)
+
+	dbConnect.commit()
+	cursor.close()
+
 	return HttpResponse(json.dumps(data))
 
 
@@ -568,4 +599,3 @@ def askWatsonDiagnosis(symptoms):
 	#print(Real_Data_Out)
 	#print(PalabrasClave)
 	return Real_Data_Out
-
