@@ -12,6 +12,8 @@ from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 import Features, ConceptsOptions
 from watson_developer_cloud.natural_language_understanding_v1 import Features, KeywordsOptions
 
+from datetime import date, datetime
+
 # User type flags
 MEDICS = 'medics'
 PATIENTS = 'patients'
@@ -106,7 +108,7 @@ def ajax_checkUser(request):
 	else:
 		data['patient_name'] = "Not found"
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 @login_required
 def ajax_makeAppointment(request):
@@ -143,7 +145,7 @@ def ajax_getCalendar(request):
 
 	for data_database in iduser_date:
 
-		string_base = data_database[0]
+		string_base = data_database
 
 		iduser = string_base[0]
 		date = string_base[1]
@@ -161,7 +163,7 @@ def ajax_getCalendar(request):
 	dbConnect.commit()
 	cursor.close()
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 
 @login_required
@@ -191,7 +193,7 @@ def ajax_getPatientData(request):
 
 	for data_database in complaint_symptoms_diagnosis:
 
-		string_base = data_database[0]
+		string_base = data_database
 
 		complaint = string_base[0]
 		symptoms = string_base[1]
@@ -207,7 +209,7 @@ def ajax_getPatientData(request):
 
 	for data_database in all_data_HCI:
 
-		string_base = data_database[0]
+		string_base = data_database
 
 		age = string_base[0]
 		height = string_base[1]
@@ -245,7 +247,7 @@ def ajax_getPatientData(request):
 	cursor.close()
 
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 
 
@@ -362,7 +364,7 @@ def ajax_askWatson(request):
 	data['illness1'] = watsonDiagnosis[4][0]
 	data['percentage1'] = "%.2f %%"%(watsonDiagnosis[4][1])
 
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 
 
@@ -375,7 +377,7 @@ def ajax_watsonDiseaseData(request):
 	data = {}
 	data['diseaseData'] = askIllnessDefinition(illness)
 	
-	return HttpResponse(json.dumps(data))
+	return HttpResponse(json.dumps(data, default=json_serial))
 
 
 
@@ -566,3 +568,14 @@ def askWatsonDiagnosis(symptoms):
 	#print(PalabrasClave)
 	return Real_Data_Out
 
+
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError ("Type %s not serializable" % type(obj))
+
+
+    
