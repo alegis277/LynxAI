@@ -39,10 +39,54 @@ def index(request):
 		labNames = [labActual.first_name for labActual in labs]
 		labIds = [labActual.id for labActual in labs]
 		return render(request, 'medics.html', {'name':request.user.first_name+" "+request.user.last_name, 'id_doc' : str(request.user.id), 'labs':zip(labIds, labNames)})
+	
+
 	elif userType == PATIENTS:
+		cursor=dbConnect.cursor()
+		sql="SELECT age, height, weight, gender from hci where id_user=%s"
+		cursor.execute(sql,[request.user.id])
+		all_data_HCI = cursor.fetchall()
+
+		appointment_doctor = []
+		appointment_lab = []
+
+		sql="SELECT id_doctor, start_time from appointments where id_user=%s and start_time >= NOW()"
+		cursor.execute(sql,[request.user.id])
+		appoint = cursor.fetchall()
+
+		for app in appoint:
+
+			sql="SELECT first_name, last_name from auth_user where id=%s"
+			cursor.execute(sql,[app[0]])
+
+			doct_data = cursor.fetchall()
+
+			appointment_doctor.append([app[1], doct_data[0][0]+" "+ doct_data[0][1]])
+
+
+		sql="SELECT id_lab_user, start_time from exams where id_user=%s and start_time >= NOW()"
+		cursor.execute(sql,[request.user.id])
+		appoint = cursor.fetchall()
+
+		for app in appoint:
+
+			sql="SELECT first_name, last_name from auth_user where id=%s"
+			cursor.execute(sql,[app[0]])
+
+			doct_data = cursor.fetchall()
+
+			appointment_lab.append([app[1], doct_data[0][0]+" "+ doct_data[0][1]])
+
+
+
 		dbConnect.commit()
 		cursor.close()
-		return render(request, 'patients.html')
+
+		return render(request, 'patients.html', {'imageurl':"/static/profile/"+str(request.user.id)+".jpg", 'name':request.user.first_name+" "+request.user.last_name, 'age': all_data_HCI[0][0],'height': all_data_HCI[0][1],'weight': all_data_HCI[0][2],'gender': all_data_HCI[0][3], 'appointment_doctor': appointment_doctor, 'appointment_lab': appointment_lab})
+	
+
+
+
 	elif userType == LABS:
 		dbConnect.commit()
 		cursor.close()

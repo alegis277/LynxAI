@@ -7,7 +7,55 @@
 	<script src="{% static 'js/jquery.min.js' %}"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 	<script src="{% static 'js/js.cookie.min.js' %}"></script>
+	<style type="text/css">
 
+
+		/* The Modal (background) */
+		.modalConfig {
+			display: none; /* Hidden by default */
+			position: fixed; /* Stay in place */
+			z-index: 1000; /* Sit on top */
+			left: 0;
+			top: 0;
+			width: 100%; /* Full width */
+			height: 100%; /* Full height */
+			background-color: rgb(0,0,0); /* Fallback color */
+			background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		}
+
+		/* Modal Content/Box */
+		.modal-contentConfig {
+			background-color: #fff;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 600px; /* Could be more or less, depending on screen size */
+			height: 280px;
+			overflow: auto; /* Enable scroll if needed */
+			margin: auto;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+
+		}
+
+		/* The Close Button */
+		.closeConfig {
+			color: #9ba3b3;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+			margin-top: -9px;
+		}
+
+		.closeConfig:hover,
+		.closeConfig:focus {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer;
+		}
+	</style>
 
 	<style type="text/css">
 
@@ -203,30 +251,40 @@
 	</div>
 
 
-	<div id='patientInfoContainer' style="height: 82vh;width: 60%;float: left;margin-top: 85px;background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);">
-		<div style="height: 30%;width: 100%;float: left;margin-top: 0px;">
-			<img src="{% static 'img/avatar_purple.png' %}" style="width: auto;height: 95%;margin: 5px;">
-			<label style="font-family: Helvetica; font-size: 40px;font-weight: 100;position: absolute;margin-top: 80px;margin-left: 5px;word-wrap: break-word;">Loading...</label>
+	<div id='patientInfoContainer' style="height: 81vh;width: 60%;float: left;margin-top: 85px;background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);">
+		<div style="height: 30%;width: 100%;float: left;margin-top: 0px;padding: 20px;margin-left: 5%;padding-bottom: 0">
+			<img src="{{imageurl}}" style="width: auto;height: 95%;margin: 5px;">
+			<label style=";font-family: Helvetica; font-size: 40px;font-weight: 100;position: absolute;margin-top: 69px;margin-left: 20px;word-wrap: break-word;">{{name}}</label>
 		</div>
-		<div style="height: 55%;width: 100%;float: left;margin-top: 0px;">
-			<textarea placeholder="Write about your symptoms" autocomplete="off" style="resize: none;float: left;height: 80%;width: 80%;margin-left: 50px;margin-top: 45px"></textarea>
+		<div style="height: 55%;width: 100%;;margin-top: 0px;">
+			<textarea placeholder="Write about your symptoms" autocomplete="off" style="resize: none;float: left;height: 60%;width: 80%;margin-left: 50px;margin-top: 45px" id="symptoms_ta"></textarea>
 		</div>
-		<div id="ask_watson" style="height: 10%;width: 187px;margin-top: 0px;margin-left: 37%;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.28);border-radius: 10px;padding-top: 5px;padding-bottom: 5px;float: left">
+		<div id="ask_watson" style="height: 10%;width: 187px;margin-top: 36px;margin-left: 37%;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.28);border-radius: 10px;padding-top: 5px;padding-bottom: 5px;float: left;cursor: pointer;" onclick="ask_watson_fun()">
 			<img src="{% static 'img/avatar_purple.png' %}" style="width: auto;height: 85%;margin-top: 5px;margin-left: 5px">
-			<label style="font-family: Helvetica; font-size: 20px;font-weight: 100;position: absolute;margin-top: 20px;margin-left: 5px;word-wrap: break-word;">Ask Watson</label>
+			<label style="cursor: pointer;font-family: Helvetica; font-size: 20px;font-weight: 100;position: absolute;margin-top: 20px;margin-left: 5px;word-wrap: break-word;">Ask Watson</label>
 		</div>
 	</div>
 
-	<div id='patientWatsonContainer' style="height: 82vh;width: 40%;float: left;margin-top: 85px;background: radial-gradient(#ffffff, #7eb4b9);box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);">
+	<div id='patientWatsonContainer' style="height: 81vh;width: 40%;float: left;margin-top: 85px;background: radial-gradient(#ffffff, #7eb4b9);box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);">
 		<div style="height: 50%;width: 100%;float: left;margin-top: 0px;">
 			<ol class="rounded-list">
-				<li><a style="background-color: #ffffffa3 !important;" id="age_main">Loading...</a></li>
-				<li><a style="background-color: #ffffffa3 !important;" id="height_main">Loading...</a></li>
-				<li><a style="background-color: #ffffffa3 !important;" id="weight_main">Loading...</a></li>
-				<li><a style="background-color: #ffffffa3 !important;" id="gender_main">Loading...</a></li>
+				<li><a style="background-color: #ffffffa3 !important;" id="age_main">Age: {{age}} years</a></li>
+				<li><a style="background-color: #ffffffa3 !important;" id="height_main">Height: {{height}} cm</a></li>
+				<li><a style="background-color: #ffffffa3 !important;" id="weight_main">Weight: {{weight}} kg</a></li>
+				<li><a style="background-color: #ffffffa3 !important;" id="gender_main">Gender: {{gender}}</a></li>
 			</ol>
 		</div>
 		<div style="height: 50%;width: 100%;float: left;margin-top: 0px;">
+
+			<label style="margin-bottom: 15px;font-family: Helvetica; font-size: 23px;font-weight: 100;display: block;word-wrap: break-word;margin-left: 35px">Future appointments: </label>
+
+			{% for appointment in appointment_doctor %}
+			<label style=";font-family: Helvetica; font-size: 17px;font-weight: 100;display: block;word-wrap: break-word;margin-left: 35px">{{ appointment.0 }} with Dr. {{appointment.1}} </label>
+			{% endfor %}
+
+			{% for appointment in appointment_lab %}
+			<label style=";font-family: Helvetica; font-size: 17px;font-weight: 100;display: block;word-wrap: break-word;margin-left: 35px">{{ appointment.0 }} at {{appointment.1}} </label>
+			{% endfor %}
 
 		</div>
 	</div>
@@ -234,5 +292,88 @@
 
 
 	<img src="{% static 'img/bywatson.png' %}" style="position: absolute;bottom: 10px;right: 7px;height: 30px">
+
+
+
+
+
+
+
+
+
+
+	<div id="ModalConfig_dis" class="modalConfig">
+
+		<div class="modal-contentConfig" id="contenidoModalConfig_dis" style="width: 700px;height: 150px">
+
+			<span class="closeConfig">&times;</span>
+
+			<label id="watson_diseaseName" style="font-family: Helvetica;font-size: 28px;margin-top: 9px;display: inline-block;">Watson Predicts</label>
+			<div style="margin-top: 40px;padding-right: 20px">
+				
+
+				<label id="watson_diseaseData" style="font-family: Helvetica;font-size: 18px;margin-top: 9px;display: inline-block;"></label>
+
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+
+
+
+
 </body>
+
+
+
+
+<script type="text/javascript">
+	
+	function ask_watson_fun() {
+
+
+		$.ajax('/ajax_askWatson/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), symptoms:$("#symptoms_ta").val()}, success: function(transport){
+
+			data = JSON.parse(transport)
+
+
+			$('#watson_diseaseData').html("I thing you have "+data.illness1+" and I'm "+data.percentage1+" sure about it")
+
+			modal_dis.style.display = 'block'
+
+
+		}});
+	}
+
+
+
+	
+
+
+</script>
+
+
+<script type="text/javascript">
+
+	modal_dis = document.getElementById('ModalConfig_dis');
+	span_dis = document.getElementsByClassName("closeConfig")[0];
+
+
+
+	span_dis.onclick = function() {
+		modal_dis.style.display = "none";
+	}
+
+
+	window.onclick = function(event) {
+		if (event.target == modal_dis) {
+			modal_dis.style.display = "none";
+		}
+	}
+</script>
 </html>
