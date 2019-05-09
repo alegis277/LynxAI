@@ -286,7 +286,7 @@
 </head>
 <body>
 
-	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 1;" id="main">
+	<div style="background: radial-gradient(#ffffff, #7eb4b9); width: 100%;line-height: 55px;left: 0;top:0;position: fixed;z-index: 10;" id="main">
 
 		<div class="main-nav" style="cursor: pointer;">
 
@@ -294,9 +294,9 @@
 
 
 			<ul id="ul_hidden">
-				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf362;</i>Change current controller</a></li>
-				<li><a onclick="console.log('op2')" href="javascript:;" id="ControllerConfig"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Classic PID configuration</a></li>
-				<li><a onclick="console.log('op3')" href="javascript:;" id="ControllerConfig2"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf085;</i>Adaptative PID configuration</a></li>
+				<li><a onclick="console.log('op1')" href="javascript:;" id="ChangeController"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf2b9;</i>HCI</a></li>
+				<li><a onclick="console.log('op2')" href="javascript:;" id="ControllerConfig"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf049;</i>Previous Exams</a></li>
+				<li><a onclick="console.log('op3')" href="javascript:;" id="ControllerConfig2"><i class="fa" style="font-size: 26px;font-size: 23px;vertical-align: middle;margin-right: 10px;">&#xf05a;</i>About LynxAI</a></li>
 
 			</ul>
 		</div>
@@ -360,14 +360,15 @@
 		<div style="width: 100%;margin-top: 20px;height: calc(100% - 190px)">
 
 			<div style="float: left;width: 50%;height: 100%">
-				<textarea placeholder="Write about patient symptoms" autocomplete="off" style="resize: none;float: left;"></textarea>
-
-				<div class="button" style="margin-left: calc(106.75% - 10px - 150px);float: left;" id="ControllerConfig2">
-					<span>End Appointment</span>
+				<textarea placeholder="Exam procedure" autocomplete="off" style="resize: none;float: left;"></textarea>
+				<input type='file' id='real-file' hidden='hidden' />
+				<div class="button" style="margin-left: 0px;float: left;" id="real-button">
+					<span>Upload File</span>
 					<svg>
 						<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
 						<polyline class="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
 					</svg>
+					<span id='real-text' style='margin-left: 140px; font-family: sans-serif; color: #aaa'>No file choosen.</span>
 				</div>
 			</div>
 			<div style="float: right;width: 50%">
@@ -376,7 +377,6 @@
 					<li><a style="background-color: #ffffffa3 !important;" id="height_main">Loading...</a></li>
 					<li><a style="background-color: #ffffffa3 !important;" id="weight_main">Loading...</a></li>
 					<li><a style="background-color: #ffffffa3 !important;" id="gender_main">Loading...</a></li>
-					<li><a style="color:#8c8c8c;background-color: #ffffffa3 !important;cursor: pointer;" onclick="modal_HCI.style.display = 'block';">Show more and edit...</a></li>
 				</ol>
 			</div>
 	</div>
@@ -466,6 +466,23 @@ function updateInfo(id_in) {
 
 update_calendar()
 
+</script>
+
+<script>
+	const realText = document.getElementById("real-text");
+	const realFile = document.getElementById("real-file");
+	const realButton = document.getElementById("real-button");
+
+	realButton.addEventListener("click", function(){
+		realFile.click();
+	});
+	realFile.addEventListener("change", function(){
+		if(realFile.value){
+			realText.innerHTML = realFile.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+		} else {
+			realText.innerHTML = "No file choosen"
+		}
+	})
 </script>
 
 </html>
