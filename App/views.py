@@ -636,6 +636,9 @@ def askWatsonDiagnosis(symptoms):
 	cursor1.close()
 	#print(Real_Data_Out)
 	#print(PalabrasClave)
+
+	while len(Real_Data_Out)<5:
+		Real_Data_Out.append([[],[]])
 	return Real_Data_Out
 
 def json_serial(obj):
