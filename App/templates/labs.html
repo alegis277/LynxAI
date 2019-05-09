@@ -354,7 +354,12 @@
 			cursor: pointer;
 		}
 	</style>
-	<div style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px">
+
+	<div id="main_initial" style="float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px;text-align: center;display: flex;justify-content: center;flex-direction: column;text-align: center;">
+		<label style="font-size: 30px;color: grey">Select a user to begin...</label>
+	</div>
+
+	<div id = "main_body" style="display: none;float: right;margin-right: 20px;height: calc(100vh - 220px);width: calc(100vw - 580px);background-color: #d3e2d5;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);padding: 30px">
 		<label style="font-size: 35px;display: block;" id="campoNombre">Loading...</label>
 		<label style="font-size: 20px;display: block;" id="campoRequerimientos">Loading...</label>
 		<div style="width: 100%;margin-top: 20px;height: calc(100% - 190px)">
@@ -362,7 +367,7 @@
 			<div style="float: left;width: 50%;height: 100%">
 				<textarea placeholder="Exam procedure" autocomplete="off" style="resize: none;float: left;"></textarea>
 				<input type='file' id='real-file' hidden='hidden' />
-				<div class="button" style="margin-left: 0px;float: left;" id="real-button">
+				<div class="button" style="margin-left: 10px;margin-top: 20px;float: left;" id="real-button">
 					<span>Upload File</span>
 					<svg>
 						<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
@@ -379,23 +384,31 @@
 					<li><a style="background-color: #ffffffa3 !important;" id="gender_main">Loading...</a></li>
 				</ol>
 			</div>
-	</div>
+		</div>
 
-	<img src="{% static 'img/bywatson.png' %}" style="position: absolute;bottom: 10px;right: 7px;height: 30px">
+		<div class="button" style="float: right;margin-top: 60px" id="">
+			<span>End Exam</span>
+			<svg>
+				<polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+				<polyline class="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+			</svg>
+		</div>
+
+		<img src="{% static 'img/bywatson.png' %}" style="position: absolute;bottom: 10px;right: 7px;height: 30px">
 
 
 
 
 
-</body>
-<script>
+	</body>
+	<script>
 
-	$(document).ready(function() {
+		$(document).ready(function() {
 
-		$('#calendar').fullCalendar({
-			header: {
-				right: '',
-			},
+			$('#calendar').fullCalendar({
+				header: {
+					right: '',
+				},
 		      minTime: '6:30', // 6:30am
 		      maxTime: '21:00', // 9:00pm
 		      timeFormat: 'hh:mm A',
@@ -404,7 +417,7 @@
 		      height: "parent",
 		      contentHeight: "parent",
 
-					defaultTimedEventDuration : {hours:1},
+		      defaultTimedEventDuration : {hours:1},
 
 		      defaultView: 'agendaDay',
 		      navLinks: false, // can click day/week names to navigate views
@@ -422,67 +435,70 @@
 
 		  });
 
-	});
+		});
 
-</script>
-
-
-
-<script>
+	</script>
 
 
-function update_calendar() {
+
+	<script>
 
 
-	$.ajax('/ajax_getCalendarLab/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken')}, success: function(transport){
+		function update_calendar() {
 
-		data = JSON.parse(transport)
 
-		glob=data.source
+			$.ajax('/ajax_getCalendarLab/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken')}, success: function(transport){
 
-		$("#calendar").fullCalendar( 'removeEvents' )
-		$("#calendar").fullCalendar( 'addEventSource', data.source )
+				data = JSON.parse(transport)
 
-	}});
+				glob=data.source
 
-}
+				$("#calendar").fullCalendar( 'removeEvents' )
+				$("#calendar").fullCalendar( 'addEventSource', data.source )
 
-function updateInfo(id_in) {
+			}});
 
-	$.ajax('/ajax_getExamInfo/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), id_lab:id_in}, success: function(transport){
-
-		data = JSON.parse(transport)
-
-		$("#campoNombre").html(data.patient_name)
-		$("#campoRequerimientos").html(data.patient_requirements)
-		$("#age_main").html("Age: "+data.age+" years")
-		$("#height_main").html("Height: "+data.height+ " cm")
-		$("#weight_main").html("Weight: "+data.weight+ " kg")
-		$("#gender_main").html("Gender: "+data.gender)
-
-	}});
-
-}
-
-update_calendar()
-
-</script>
-
-<script>
-	const realText = document.getElementById("real-text");
-	const realFile = document.getElementById("real-file");
-	const realButton = document.getElementById("real-button");
-
-	realButton.addEventListener("click", function(){
-		realFile.click();
-	});
-	realFile.addEventListener("change", function(){
-		if(realFile.value){
-			realText.innerHTML = realFile.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
-		} else {
-			realText.innerHTML = "No file choosen"
 		}
-	})
-</script>
 
-</html>
+		function updateInfo(id_in) {
+
+			$("#main_initial").css({'display':'none'})
+			$("#main_body").css({'display':'block'})
+
+			$.ajax('/ajax_getExamInfo/', {method: 'post',data: {csrfmiddlewaretoken:Cookies.get('csrftoken'), id_lab:id_in}, success: function(transport){
+
+				data = JSON.parse(transport)
+
+				$("#campoNombre").html(data.patient_name)
+				$("#campoRequerimientos").html(data.patient_requirements)
+				$("#age_main").html("Age: "+data.age+" years")
+				$("#height_main").html("Height: "+data.height+ " cm")
+				$("#weight_main").html("Weight: "+data.weight+ " kg")
+				$("#gender_main").html("Gender: "+data.gender)
+
+			}});
+
+		}
+
+		update_calendar()
+
+	</script>
+
+	<script>
+		const realText = document.getElementById("real-text");
+		const realFile = document.getElementById("real-file");
+		const realButton = document.getElementById("real-button");
+
+		realButton.addEventListener("click", function(){
+			realFile.click();
+		});
+		realFile.addEventListener("change", function(){
+			if(realFile.value){
+				realText.innerHTML = realFile.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+			} else {
+				realText.innerHTML = "No file choosen"
+			}
+		})
+	</script>
+
+	</html>
